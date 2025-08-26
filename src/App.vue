@@ -1,9 +1,9 @@
 <script>
-import { getNavBarInfo } from '@/utils/getSystemInfo.js';
+import { getMiniProgramSystemInfo } from '@/utils/getSystemInfo.js';
 export default {
   onLaunch: async function () {
     // console.log('App Launch',import.meta.env.VUE_APP_VERSION);
-    await getNavBarInfo();
+    await getMiniProgramSystemInfo();
   },
   onShow: async function () {
     console.log('App Show');

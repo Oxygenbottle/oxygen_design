@@ -9,13 +9,14 @@
         :scroll-left="scrollLeft"
       >
         <div
-          v-for="(tab, index) in tabs"
+          v-for="(tab, index) in classList"
           :key="index"
           class="tab-item"
           :class="{ active: activeIndex === index }"
           @click="handleClickTab(index)"
-          >{{ tab.name }}</div
         >
+          {{ tab.label }}
+        </div>
         <!-- 移动的小蓝条 -->
         <div class="tab-indicator" :style="indicatorStyle"></div>
       </scroll-view>
@@ -26,14 +27,21 @@
       class="swiper"
       :indicator-dots="false"
       :autoplay="false"
-      :interval="false"
       :duration="300"
       :current="activeIndex"
       :style="'background:#fff'"
       @animationfinish="(e) => swiperChangeEnd(e)"
     >
-      <swiper-item class="swiper-item" v-for="(tab, index) in tabs" :key="index">
-        <post-item v-for="post in postList" :key="post.id" :post="post"></post-item>
+      <swiper-item
+        class="swiper-item"
+        v-for="(tab, index) in classList"
+        :key="index"
+      >
+        <post-item
+          v-for="post in postList"
+          :key="post.id"
+          :post="post"
+        ></post-item>
       </swiper-item>
     </swiper>
   </div>
@@ -41,30 +49,34 @@
 
 <script>
 // 导入模拟数据和组件
-import mockData from "../mock.js";
-import postItem from "./postItem.vue";
+import mockData from '../mock.js';
+import postItem from './postItem.vue';
 
 export default {
   components: {
-    postItem,
+    postItem
   },
   props: {
     outerSwiperIndex: {
       type: Number,
       default: 0
+    },
+    classList: {
+      type: Array,
+      default: []
     }
   },
   data() {
     return {
       tabs: [
-        { name: "COS" },
-        { name: "古风" },
-        { name: "谷子" },
-        { name: "棚子" },
-        { name: "出图" },
-        { name: "咖啡馆" },
-        { name: "分享" },
-        { name: "讨论" },
+        { name: 'COS' },
+        { name: '古风' },
+        { name: '谷子' },
+        { name: '棚子' },
+        { name: '出图' },
+        { name: '咖啡馆' },
+        { name: '分享' },
+        { name: '讨论' }
       ],
       activeIndex: 0,
       currentTabWidth: 0,
@@ -74,25 +86,26 @@ export default {
       systemInfo: {}, // 系统信息
       scrollLeft: 0, // 用于控制scroll-view的滚动位置
       postList: mockData.postData, // 使用模拟数据
-      _outerSwiperIndex: 0,
+      _outerSwiperIndex: 0
     };
   },
-  mounted() {
+  async mounted() {
     // 获取系统信息
-    this.getSystemInfo();
+    await this.getSystemInfo();
     // 初始化时缓存所有tab位置
     this.cacheTabPositions();
   },
   computed: {
     indicatorStyle() {
       const _pageWidth = this.systemInfo.windowWidth * this._outerSwiperIndex;
-      const left = this.currentTabLeft + this.currentTabWidth / 2 - 24 - _pageWidth;
+      const left =
+        this.currentTabLeft + this.currentTabWidth / 2 - 24 - _pageWidth;
       return `left: ${left}px;`;
     },
     // 视口中心位置
     viewportCenter() {
       return this.systemInfo.windowWidth / 2 || 300;
-    },
+    }
   },
   watch: {
     outerSwiperIndex: {
@@ -108,10 +121,13 @@ export default {
     // 获取系统信息
     getSystemInfo() {
       try {
-        const res = uni.getSystemInfoSync();
-        this.systemInfo = res;
+        const windowWidth = uni.getStorageSync('windowWidth');
+        // 保留原有字段结构，确保兼容性
+        this.systemInfo = {
+          windowWidth
+        };
       } catch (e) {
-        console.error("获取系统信息失败", e);
+        console.error('获取系统信息失败', e);
         // 提供默认值
         this.systemInfo = { windowWidth: 375 };
       }
@@ -120,7 +136,7 @@ export default {
     // 缓存所有tab的位置信息
     cacheTabPositions() {
       const query = uni.createSelectorQuery().in(this);
-      query.selectAll(".tab-item").boundingClientRect();
+      query.selectAll('.tab-item').boundingClientRect();
       query.exec((res) => {
         if (res && res[0]) {
           this.tabPositions = res[0];
@@ -137,7 +153,7 @@ export default {
     // 更新指示器位置
     updateTabIndicator(index) {
       if (this.tabPositions[index]) {
-        console.log("index ======= >", index);
+        console.log('index ======= >', index);
         const rect = this.tabPositions[index];
         this.currentTabWidth = rect.width;
         this.currentTabLeft = rect.left;
@@ -161,7 +177,10 @@ export default {
 
       const rect = this.tabPositions[index];
       const tabCenter = rect.left + rect.width / 2;
-      const newScrollLeft = tabCenter - this.viewportCenter - this.systemInfo.windowWidth * this._outerSwiperIndex;
+      const newScrollLeft =
+        tabCenter -
+        this.viewportCenter -
+        this.systemInfo.windowWidth * this._outerSwiperIndex;
 
       // 使用数据绑定方式滚动scroll-view
       this.isScrolling = true;
@@ -183,8 +202,8 @@ export default {
         this.scrollToTab(e.detail.current);
         this.updateTabIndicator(e.detail.current);
       }, 0);
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -1,10 +1,10 @@
 <template>
   <div>
-    <Menu></Menu>
+    <Menu :data="data.menu"></Menu>
     <!-- 资讯横幅 -->
-    <Notice></Notice>
+    <Notice :data="data.recommend"></Notice>
     <!-- 内容 -->
-    <Content :outerSwiperIndex="outerSwiperIndex"></Content>
+    <Content :outerSwiperIndex="outerSwiperIndex" :classList="data.subClass"></Content>
   </div>
 </template>
 <script>
@@ -17,6 +17,10 @@ export default {
     outerSwiperIndex: {
       type: Number,
       default: 0
+    },
+    data: {
+      type: Object,
+      default: {},
     }
   }
 };

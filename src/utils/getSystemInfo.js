@@ -1,10 +1,10 @@
-export async function getNavBarInfo() {
+export async function getMiniProgramSystemInfo() {
   // 尝试从缓存读取
   const cachedInfo = uni.getStorageSync('navBarInfo');
   if (cachedInfo) return cachedInfo;
 
   // 缓存不存在则重新获取
-  const systemInfo = uni.getSystemInfoSync();
+  const systemInfo = uni.getWindowInfo();
   const menuBarInfo = uni.getMenuButtonBoundingClientRect();
   const statusBarHeight = systemInfo.statusBarHeight;
   const navBarHeight = menuBarInfo.height + (menuBarInfo.top - statusBarHeight) * 2;
@@ -31,9 +31,10 @@ export async function getNavBarInfo() {
       right: systemInfo.safeAreaInsets.right
     }
   };
-
+  console.log('systemInfo ======> ',systemInfo)
   // 存入缓存（设置1小时过期时间）
   uni.setStorageSync('navBarInfo', navBarInfo);
+  uni.setStorageSync('windowWidth', systemInfo.windowWidth);
   uni.setStorageSync('navBarInfoExpire', Date.now() + 3600000);
 
   return navBarInfo;

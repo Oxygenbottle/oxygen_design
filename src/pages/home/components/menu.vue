@@ -2,42 +2,24 @@
   <view class="top-nav">
     <scroll-view class="menu-scroll" scroll-x="true" scroll-with-animation>
       <view class="menu-icons">
-        <view class="icon-item">
-          <img src="../../../assets/icons/menus/zhu.png" />
-          <text>拼好棚</text>
-        </view>
-        <view class="icon-item">
-          <img src="../../../assets/icons/menus/guanmucong.png" />
-          <text>拼好摄</text>
-        </view>
-        <view class="icon-item">
-          <img src="../../../assets/icons/menus/muzhuang.png" />
-          <text>拼好团</text>
-        </view>
-        <view class="icon-item">
-          <img src="../../../assets/icons/menus/yinxing.png" />
-          <text>棚费咨询</text>
-        </view>
-        <view class="icon-item">
-          <img src="../../../assets/icons/menus/siyecao.png" />
-          <text>预约列表</text>
-        </view>
-        <view class="icon-item">
-          <img src="../../../assets/icons/menus/mogu.png" />
-          <text>注意事项</text>
-        </view>
-        <view class="icon-item">
-          <img src="../../../assets/icons/menus/sakula.png" />
-          <text>活动情报</text>
-        </view>
-        <view class="icon-item">
-          <img src="../../../assets/icons/menus/juhua.png" />
-          <text>会员中心</text>
+        <view class="icon-item" v-for="(item, index) of data" :key="index">
+          <text>{{ item.name }}</text>
+          <img :src="item.img" />
         </view>
       </view>
     </scroll-view>
   </view>
 </template>
+<script>
+export default {
+  props: {
+    data: {
+      type: Array,
+      default: []
+    }
+  }
+};
+</script>
 
 <style scoped lang="scss">
 /* 顶部导航 */

@@ -15,25 +15,37 @@
 
 <script>
 import { getTabbarInfo } from '@/api/public';
-import { getNavBarInfo } from '@/utils/getSystemInfo.js';
 export default {
   name: 'SafeAreaTabbar',
   data() {
     return {
       safeAreaInsetsBottom: 0,
       tabbarList: [],
-      tabbarInfoStyle: '',
+      tabbarInfoStyle: ''
     };
   },
-  async created() {
+  created() {
     this.getTabbarInfo();
-    let naviInfo = await getNavBarInfo();
-    this.tabbarInfoStyle = `padding-bottom: ${naviInfo.safeAreaInsets.bottom}rpx`
+    try {
+      const navBarInfo = uni.getStorageSync('navBarInfo');
+      if (navBarInfo) {
+        this.tabbarInfoStyle = `padding-bottom: ${navBarInfo.safeAreaInsets.bottom}rpx`; // console.log('页面容器从缓存获取到的系统信息:', this.navBarInfo);
+      } else {
+        console.warn('缓存中未找到导航栏信息');
+        // 提供默认值以确保页面正常显示
+        this.tabbarInfoStyle += 'padding-bottom: calc(30rpx + 20vw);';
+      }
+    } catch (e) {
+      console.error('获取缓存数据失败', e);
+      // 发生错误时也提供默认值
+      this.tabbarInfoStyle += 'padding-bottom: calc(30rpx + 20vw);';
+    }
   },
   computed: {
     // 计算实际安全距离高度
   },
   methods: {
+    // 获取menu菜单栏
     getTabbarInfo() {
       getTabbarInfo().then((res) => {
         // console.log('res', res);
@@ -47,7 +59,7 @@ export default {
     changeTab(item) {
       // console.log('tabbar changeTab', item.path);
       this.$emit('change', item);
-    },
+    }
   }
 };
 </script>

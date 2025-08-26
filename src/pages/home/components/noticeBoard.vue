@@ -1,12 +1,42 @@
 <template>
   <div class="news-banner">
-    <text class="news-tag">资讯</text>
-    <text class="news-title">桃乐丝 - 开业大酬宾，欢迎您的到来，来就送甲醛空气一份，附加一份</text>
-    <text class="news-more">全部></text>
+    <swiper
+      class="news-swiper"
+      :indicator-dots="false"
+      :autoplay="true"
+      :interval="3000"
+      :vertical="true"
+      :duration="300"
+    >
+      <swiper-item v-for="item in data" :key="item.id">
+        <div class="news-content">
+          <text class="news-tag">{{ item.tip }}</text>
+          <text class="news-title">{{ item.title }}</text>
+        </div>
+      </swiper-item>
+    </swiper>
+    <text class="news-more" @click="handleMore">全部></text>
   </div>
 </template>
 
-<script setup></script>
+<script>
+export default {
+  props: {
+    data: {
+      type: Array,
+      default: []
+    }
+  },
+  methods: {
+    // 处理"全部"按钮点击事件
+    handleMore: () => {
+      // 这里可以添加跳转到全部资讯页面的逻辑
+      console.log('跳转到全部资讯页面');
+      // 例如：uni.navigateTo({ url: '/pages/news/list' });
+    }
+  }
+};
+</script>
 
 <style scoped lang="scss">
 /* 资讯横幅 */
@@ -20,6 +50,11 @@
   justify-content: space-between;
   align-items: center;
   border-radius: 15rpx;
+  height: 60rpx; // 固定高度以适应轮播效果
+  .news-swiper {
+    width: 100%;
+    height: 60rpx;
+  }
   .news-tag {
     background-color: #1ec3ff;
     color: #fff;
@@ -28,18 +63,34 @@
     border-radius: $uni-border-radius-sm;
     margin-right: $uni-spacing-row-sm;
     border-radius: 15rpx;
+    flex-shrink: 0;
   }
+
+  .news-swiper {
+    flex: 1;
+    height: 60rpx;
+  }
+
+  .news-content {
+    height: 60rpx;
+    display: flex;
+    align-items: center;
+  }
+
   .news-title {
     color: #fff;
     font-size: $uni-font-size-sm;
-    flex: 1;
+    width: 100%;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
   }
+
   .news-more {
     color: #fff;
     font-size: $uni-font-size-sm;
+    flex-shrink: 0;
+    margin-left: $uni-spacing-row-sm;
   }
 }
 </style>

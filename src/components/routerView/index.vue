@@ -9,7 +9,6 @@
 </template>
 
 <script>
-import { getNavBarInfo } from '@/utils/getSystemInfo.js';
 import Navbar from '@/components/navbar/index.vue';
 import Home from '@/pages/home/index.vue';
 import Message from '@/pages/message/index.vue';
@@ -53,7 +52,6 @@ export default {
     };
   },
   async created() {
-    let navBarInfo = await getNavBarInfo();
     // this.routerViewStyle = `height: calc(100vh - ${navBarInfo.statusBarHeight}rpx - ${navBarInfo.navBarHeight}rpx - ${navBarInfo.safeAreaInsets.bottom}rpx - 20vw)`;
   },
   methods: {}

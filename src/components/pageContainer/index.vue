@@ -5,8 +5,6 @@
 </template>
 
 <script>
-import { getNavBarInfo } from '@/utils/getSystemInfo';
-
 export default {
   name: 'PageContainer',
   props: {
@@ -25,14 +23,23 @@ export default {
       containerStyle: ''
     };
   },
-  async created() {
-    this.navBarInfo = await getNavBarInfo();
-    // this.containerStyle = `padding-top: ${
-    //   this.navBarInfo.statusBarHeight + this.navBarInfo.navBarHeight
-    // }rpx; `;
-    this.containerStyle += `padding-bottom: calc(${this.navBarInfo.safeAreaInsets.bottom}rpx + 20vw);`;
-
-    console.log('页面容器获取到的系统信息:', this.navBarInfo);
+  created() {
+    try {
+      const navBarInfo = uni.getStorageSync('navBarInfo');
+      if (navBarInfo) {
+        this.navBarInfo = navBarInfo;
+        this.containerStyle += `padding-bottom: calc(${this.navBarInfo.safeAreaInsets.bottom}rpx + 20vw);`;
+        // console.log('页面容器从缓存获取到的系统信息:', this.navBarInfo);
+      } else {
+        console.warn("缓存中未找到导航栏信息");
+        // 提供默认值以确保页面正常显示
+        this.containerStyle += 'padding-bottom: calc(30rpx + 20vw);';
+      }
+    } catch (e) {
+      console.error("获取缓存数据失败", e);
+      // 发生错误时也提供默认值
+      this.containerStyle += 'padding-bottom: calc(30rpx + 20vw);';
+    }
   }
 };
 </script>
