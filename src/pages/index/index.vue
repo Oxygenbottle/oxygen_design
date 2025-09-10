@@ -1,5 +1,5 @@
 <template>
-  <pageContainer :router="router" :style="'background: #fff;'">
+  <pageContainer :style="'background: #fff;'">
     <routerView :router="router"></routerView>
     <addList></addList>
     <tabbar @change="changeTab"></tabbar>

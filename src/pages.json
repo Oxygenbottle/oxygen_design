@@ -5,7 +5,7 @@
       "style": {
         "navigationStyle": "custom",
         "navigationBarTextStyle": "white",
-				"enablePullDownRefresh": false
+        "enablePullDownRefresh": false
       }
     },
     {
@@ -32,10 +32,21 @@
       "style": {
         "navigationBarTitleText": "message"
       }
+    },
+    {
+      "path": "pages/demo/index",
+      "style": {
+        "navigationBarTitleText": "测试"
+      }
     }
   ],
-  "globalStyle": {
-  },
+  "subPackages": [
+    {
+      "root": "pagesA",
+      "pages": [{}]
+    }
+  ],
+  "globalStyle": {},
   "tabBar": {
     "custom": true,
     "color": "#000000",

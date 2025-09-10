@@ -12,10 +12,6 @@ export default {
       type: String,
       default: ''
     },
-    router: {
-      type: Object,
-      default: () => {}
-    }
   },
   data() {
     return {

@@ -3,8 +3,8 @@
     <scroll-view class="menu-scroll" scroll-x="true" scroll-with-animation>
       <view class="menu-icons">
         <view class="icon-item" v-for="(item, index) of data" :key="index">
-          <text>{{ item.name }}</text>
           <img :src="item.img" />
+          <text>{{ item.name }}</text>
         </view>
       </view>
     </scroll-view>

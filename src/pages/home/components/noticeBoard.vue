@@ -2,10 +2,10 @@
   <div class="news-banner">
     <swiper
       class="news-swiper"
-      :indicator-dots="false"
-      :autoplay="true"
-      :interval="3000"
       :vertical="true"
+      :autoplay="true"
+      :indicator-dots="false"
+      :interval="2000"
       :duration="300"
     >
       <swiper-item v-for="item in data" :key="item.id">

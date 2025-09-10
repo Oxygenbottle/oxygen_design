@@ -7,7 +7,7 @@
         :key="index"
         @click="changeTab(item)"
       >
-        {{ item.name }}
+        {{ item.text }}
       </view>
     </view>
   </view>

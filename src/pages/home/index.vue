@@ -12,6 +12,7 @@
       style="height: 100vh"
       :indicator-dots="false"
       :autoplay="false"
+      :interval="false"
       :duration="300"
       :current="currentIndex"
       @animationfinish="(e) => swiperChangeEnd(e)"
@@ -37,55 +38,18 @@
 import { navbar } from './components/navbar.vue';
 import { pageContainer } from './components/pageContainer.vue';
 import { getHomeData } from '../../../mock/homeData.js';
+import { getHomeInfo } from '@/api/public.js';
 
 export default {
   components: { navbar, pageContainer },
   data() {
     return {
-      navList: [
-        {
-          id: 0,
-          name: '桃乐丝',
-          topBg:
-            'https://oxy-1258558723.cos.ap-shanghai.myqcloud.com/oxy_mini/img/doro_bg.png'
-        },
-        {
-          id: 1,
-          name: '大橘公馆',
-          topBg:
-            'https://oxy-1258558723.cos.ap-shanghai.myqcloud.com/oxy_mini/img/cat_bg.png'
-        },
-        {
-          id: 2,
-          name: '今菲昔比',
-          topBg:
-            'https://oxy-1258558723.cos.ap-shanghai.myqcloud.com/oxy_mini/img/feibi_bg.png'
-        },
-        {
-          id: 3,
-          name: 'shellter',
-          topBg:
-            'https://oxy-1258558723.cos.ap-shanghai.myqcloud.com/oxy_mini/img/shelter_bg.png'
-        },
-        {
-          id: 4,
-          name: '雪华',
-          topBg:
-            'https://oxy-1258558723.cos.ap-shanghai.myqcloud.com/oxy_mini/img/xuehua_bg.png'
-        },
-        {
-          id: 5,
-          name: '猫罗万象',
-          topBg:
-            'https://oxy-1258558723.cos.ap-shanghai.myqcloud.com/oxy_mini/img/maoluo_bg.png'
-        }
-      ],
       dataList: [],
       currentIndex: 0,
       topPadding: 0,
       navBarHeight: 0,
       imgStyle: '',
-      loading: false,
+      loading: false
     };
   },
   created() {
@@ -116,7 +80,7 @@ export default {
       this.loading = true;
       try {
         // 调用模拟数据API
-        const response = await getHomeData();
+        const response = await getHomeInfo();
         if (response.success) {
           this.dataList = response.data;
           console.log('成功加载首页模拟数据:', this.dataList);

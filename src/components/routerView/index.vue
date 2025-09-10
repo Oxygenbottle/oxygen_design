@@ -1,9 +1,10 @@
 <template>
   <div class="router-view" :style="{ opacity: opacity }">
     <Navbar v-if="router.type === 'page'">{{ router.name }}</Navbar>
-    <Home v-if="currentPath === '/pages/profile/index'"></Home>
+    <Home v-if="currentPath === '/pages/home/index'"></Home>
     <Message v-else-if="currentPath === '/pages/message/index'"></Message>
-    <My v-else-if="currentPath === '/pages/home/index'"></My>
+    <Post v-else-if="currentPath === '/pages/post/index'"></Post>
+    <My v-else-if="currentPath === '/pages/my/index'"></My>
     <Dynamic v-else-if="currentPath === '/pages/dynamic/index'"></Dynamic>
   </div>
 </template>
@@ -12,12 +13,13 @@
 import Navbar from '@/components/navbar/index.vue';
 import Home from '@/pages/home/index.vue';
 import Message from '@/pages/message/index.vue';
+import Post from '@/pages/post/index.vue'
 import My from '@/pages/my/index.vue';
 import Dynamic from '@/pages/dynamic/index.vue';
 
 export default {
   name: 'RouterView',
-  components: { Navbar, Home, Message, My, Dynamic },
+  components: { Navbar, Home, Message, My, Dynamic, Post },
   props: {
     router: {
       type: Object,
@@ -33,7 +35,7 @@ export default {
         this.currentPath = ''
         // 等待淡出完成后，切换组件并开始淡入
         setTimeout(() => {
-          this.currentPath = newVal.path;
+          this.currentPath = newVal.pagePath;
           this.opacity = 1;
         }, 300); // 这里的时间需要和CSS过渡时间一致
       },

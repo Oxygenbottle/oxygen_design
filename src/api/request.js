@@ -22,7 +22,8 @@ const request = axios.create({
     return new Promise((resolve, reject) => {
       uni.request({
         method: config.method.toUpperCase(),
-        url: config.baseURL + config.url,
+        // 修复当 baseURL 为空时拼接出错的问题
+        url: (config.baseURL || '') + config.url,
         header: config.headers,
         data: config.data,
         dataType: 'json',
