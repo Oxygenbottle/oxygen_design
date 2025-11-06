@@ -6,7 +6,7 @@ export default {
     await getMiniProgramSystemInfo();
   },
   onShow: async function () {
-    console.log('App Show');
+    // console.log('App Show');
   },
   methods: {},
 
