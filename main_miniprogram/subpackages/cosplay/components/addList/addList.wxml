@@ -1,0 +1,1 @@
+<view class="add-content _div"><view data-event-opts="{{[['tap',[['openDialog',['$event']]]]]}}" class="text-area _div" bindtap="__e"><label class="title _span">{{title}}</label></view><dd-list class="vue-ref" vue-id="a57c647c-1" data-ref="ddList" bind:__l="__l"></dd-list></view>

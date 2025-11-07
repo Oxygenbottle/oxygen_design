@@ -1,0 +1,50 @@
+{
+  "pages": [
+    "pages/oxy/index",
+    "pages/workshop/index",
+    "pages/kola/index",
+    "pages/coco/index"
+  ],
+  "window": {
+    "navigationBarTitleText": "OXYGEN",
+    "navigationBarTextStyle": "white",
+    "navigationBarBackgroundColor": "#111111",
+    "backgroundTextStyle": "light",
+    "backgroundColor": "#000000"
+  },
+  "tabBar": {
+    "color": "#888888",
+    "selectedColor": "#00E6A8",
+    "backgroundColor": "#111111",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/oxy/index",
+        "text": "OXY"
+      },
+      {
+        "pagePath": "pages/workshop/index",
+        "text": "创意工坊"
+      },
+      {
+        "pagePath": "pages/kola/index",
+        "text": "可乐"
+      },
+      {
+        "pagePath": "pages/coco/index",
+        "text": "COCO"
+      }
+    ]
+  },
+  "subpackages": [
+    {
+      "root": "subpackages/cosplay",
+      "name": "cosplay",
+      "independent": true,
+      "pages": [
+        "pages/index/index",
+        "pages/demo/index"
+      ]
+    }
+  ]
+}

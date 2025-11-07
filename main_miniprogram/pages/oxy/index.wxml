@@ -1,0 +1,5 @@
+<view class="container">
+  <!-- OXY 根页面：做互动特效展示的入口 -->
+  <view class="title">OXY · 特效互动</view>
+  <view class="desc">这里会承载酷炫的互动与展示效果。</view>
+</view>

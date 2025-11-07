@@ -1,0 +1,14 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/home/index",
+    "pages/my/index",
+    "pages/dynamic/index",
+    "pages/message/index",
+    "pages/demo/index"
+  ],
+  "subPackages": [],
+  "window": {},
+  "lazyCodeLoading": "requiredComponents",
+  "usingComponents": {}
+}

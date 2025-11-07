@@ -1,0 +1,5 @@
+<view class="container">
+  <!-- 可乐页面：宠物相册记录 -->
+  <view class="title">可乐相册</view>
+  <view class="desc">记录两只可爱的宠物日常。</view>
+</view>

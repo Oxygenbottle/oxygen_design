@@ -1,0 +1,1 @@
+<view class="page-container _div data-v-76b5e951" style="{{(containerStyle+style)}}"><slot></slot></view>

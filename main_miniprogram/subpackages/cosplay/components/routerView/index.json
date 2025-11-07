@@ -1,0 +1,11 @@
+{
+  "component": true,
+  "usingComponents": {
+    "navbar": "../navbar/index",
+    "home": "../../pages/home/index",
+    "message": "../../pages/message/index",
+    "my": "../../pages/my/index",
+    "dynamic": "../../pages/dynamic/index",
+    "post": "../../pages/post/index"
+  }
+}

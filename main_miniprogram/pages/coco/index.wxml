@@ -1,0 +1,5 @@
+<view class="container">
+  <!-- COCO 页面：统计记录与个人信息 -->
+  <view class="title">COCO · 统计与个人</view>
+  <view class="desc">后续接入用户信息与数据统计模块。</view>
+</view>

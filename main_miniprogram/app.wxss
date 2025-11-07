@@ -1,0 +1,9 @@
+/* 全局样式：做统一的暗色系外壳视觉 */
+page {
+  background-color: #000000;
+  color: #EEEEEE;
+}
+
+.container {
+  padding: 24rpx;
+}

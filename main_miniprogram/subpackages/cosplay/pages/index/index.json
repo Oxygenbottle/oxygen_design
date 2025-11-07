@@ -1,0 +1,11 @@
+{
+  "navigationStyle": "custom",
+  "navigationBarTextStyle": "white",
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "add-list": "../../components/addList/addList",
+    "tabbar": "../../components/tabbar/index",
+    "page-container": "../../components/pageContainer/index",
+    "router-view": "../../components/routerView/index"
+  }
+}

@@ -1,0 +1,1 @@
+Page({ onLoad() { console.log('可乐页面加载'); } });

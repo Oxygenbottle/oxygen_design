@@ -1,0 +1,8 @@
+{
+  "component": true,
+  "usingComponents": {
+    "menu": "./menu",
+    "notice": "./noticeBoard",
+    "content": "./content"
+  }
+}

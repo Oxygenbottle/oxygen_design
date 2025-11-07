@@ -1,0 +1,1 @@
+Page({ onLoad() { console.log('COCO 页面加载'); } });

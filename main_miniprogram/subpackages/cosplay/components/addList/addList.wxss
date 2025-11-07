@@ -1,0 +1,1 @@
+.add-content{width:80rpx;height:80rpx;border-radius:50%;background-color:#e6e5ea;color:#6d6c70;line-height:80rpx;text-align:center;padding-bottom:4rpx;position:fixed;bottom:15vh;left:10vw;z-index:1000}

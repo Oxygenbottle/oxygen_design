@@ -1,0 +1,28 @@
+<view class="container">
+  <!-- 创意工坊：展示创意小程序的列表，风格简洁大气 -->
+  <view class="title">创意工坊</view>
+  <view class="desc">精致、简洁的创意作品集展示。</view>
+
+  <!-- 卡片列表渲染 -->
+  <view class="card-list">
+    <block wx:for="{{items}}" wx:key="name">
+      <view class="card">
+        <view class="card-header">
+          <view class="card-title">{{item.title}}</view>
+          <view class="card-tags">
+            <block wx:for="{{item.tags}}" wx:key="*this">
+              <text class="tag">{{item}}</text>
+            </block>
+          </view>
+        </view>
+        <view class="card-desc">{{item.description}}</view>
+        <button class="card-btn" bindtap="openRoute" data-url="{{item.route}}">进入</button>
+      </view>
+    </block>
+  </view>
+
+  <!-- 为空提示 -->
+  <view wx:if="{{!items || items.length === 0}}" class="empty">
+    暂无可展示的创意项目，构建后将自动出现在这里。
+  </view>
+</view>

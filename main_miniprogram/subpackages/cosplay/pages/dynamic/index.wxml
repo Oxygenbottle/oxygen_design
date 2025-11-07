@@ -1,0 +1,1 @@
+<view class="content data-v-051b3be0">动态<button data-event-opts="{{[['tap',[['toPDF',['$event']]]]]}}" bindtap="__e" class="data-v-051b3be0">跳转并签订协议demo</button></view>

@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "my",
+  "usingComponents": {
+    "lottie-canvas": "../../components/lottieCanvas/lottieCanvas"
+  },
+  "component": true
+}
