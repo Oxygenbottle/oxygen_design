@@ -1,7 +1,7 @@
 <template>
   <view class="post-item">
     <view class="user-info">
-      <image :src="post.avatar" mode="aspectFit"></image>
+      <image :src="post.avatar" mode="aspectFit" class="user-avatar"></image>
       <view class="user-details">
         <view class="user-name">
           {{ post.username }}
@@ -29,11 +29,11 @@
     </view>
     <view v-if="post.actions" class="post-actions">
       <view class="action-item">
-        <text>💬</text>
+        <text class="action-icon">💬</text>
         <text>{{ post.actions.commentCount }}</text>
       </view>
       <view class="action-item">
-        <text>👍</text>
+        <text class="action-icon">👍</text>
         <text>{{ post.actions.likeCount }}</text>
       </view>
     </view>
@@ -67,7 +67,7 @@ export default {
     align-items: center;
     margin-bottom: 20rpx;
 
-    image {
+    .user-avatar {
       width: 70rpx;
       height: 70rpx;
       border-radius: 50%;
@@ -177,7 +177,7 @@ export default {
       font-size: 24rpx;
       color: #999;
 
-      text:first-child {
+      .action-icon {
         font-size: 40rpx;
         margin-bottom: 6rpx;
       }

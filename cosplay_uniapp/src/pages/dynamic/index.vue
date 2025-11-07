@@ -12,7 +12,6 @@ export default {
       inited: false
     };
   },
-  onLoad() {},
   methods: {
     toPDF() {
       // 在分包模式下跳转到 /subpackages/cosplay/pages/demo/index；在独立开发模式下跳转到 /pages/demo/index

@@ -28,10 +28,12 @@ export default {
     // 页面生命周期：mounted - 打印系统信息，辅助判断环境
     console.log('[Cosplay] mounted');
     try {
-      const sys = uni.getSystemInfoSync();
-      console.log('[Cosplay] mounted system:', sys);
+      // 使用推荐 API：仅获取窗口信息，避免 getSystemInfoSync 废弃警告
+      const win = uni.getWindowInfo();
+      console.log('[Cosplay] mounted windowInfo:', win);
     } catch (e) {
-      console.warn('[Cosplay] mounted getSystemInfoSync failed:', e && e.message);
+      // 兜底：若获取窗口信息失败，仅打印警告，不影响页面流程
+      console.warn('[Cosplay] mounted getWindowInfo failed:', e && e.message);
     }
     // 兜底：若 Tabbar 未能在短时间内触发 changeTab，则设置默认首页路由，避免首屏空白
     setTimeout(() => {

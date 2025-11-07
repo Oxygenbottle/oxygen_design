@@ -136,12 +136,13 @@ export default {
     initCanvas() {
       // 获取系统信息以适配不同屏幕
       try {
-        const sysInfo = uni.getSystemInfoSync();
-        const windowWidth = sysInfo.windowWidth;
+        // 使用推荐 API：获取窗口信息，避免 getSystemInfoSync 废弃警告
+        const win = uni.getWindowInfo();
+        const windowWidth = win.windowWidth;
         // 根据屏幕宽度调整画布大小，保持比例
         this.canvasWidth = windowWidth - 40; // 左右各留20px边距
         this.canvasHeight = this.canvasWidth * 1.415; // 保持1240×1755的比例
-        console.log('initCanvas: 系统信息', sysInfo);
+        console.log('initCanvas: 窗口信息', win);
         console.log('initCanvas: 画布尺寸设置为', this.canvasWidth, '×', this.canvasHeight);
       } catch (e) {
         console.error('获取系统信息失败:', e);

@@ -17,9 +17,9 @@ export default {
       inited: false,
     };
   },
-  onLoad() {
-    this.init();
-  },
+  mounted() {
+      this.init();
+    },
   methods: {
     init() {
       if (this.inited) return;

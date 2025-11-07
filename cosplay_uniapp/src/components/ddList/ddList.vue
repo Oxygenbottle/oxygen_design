@@ -52,7 +52,6 @@ export default {
       ]
     };
   },
-  onLoad() { },
   methods: {
     open() {
       this.pop_show = true;

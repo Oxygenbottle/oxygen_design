@@ -1,6 +1,7 @@
 <template>
   <div class="router-view" :style="{ opacity: opacity }">
-    <Navbar v-if="router.type === 'page'">{{ router.name }}</Navbar>
+    <!-- 空值保护，避免在 router 未初始化时访问属性导致渲染报错 -->
+    <Navbar v-if="router && router.type === 'page'">{{ router.name }}</Navbar>
     <Home v-if="currentPath === '/pages/home/index'"></Home>
     <Message v-else-if="currentPath === '/pages/message/index'"></Message>
     <Post v-else-if="currentPath === '/pages/post/index'"></Post>
@@ -24,7 +25,8 @@ export default {
   props: {
     router: {
       type: Object,
-      default: () => {}
+      // 注意：必须返回一个对象，否则默认值为 undefined 会导致 watch 初次触发时 newVal/oldVal 为 undefined
+      default: () => ({})
     }
   },
   watch: {

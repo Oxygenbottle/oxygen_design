@@ -33,9 +33,18 @@ export default {
   },
   methods: {
     initCanvas() {
-      const sysInfo = uni.getSystemInfoSync();
-      this.width = sysInfo.windowWidth;
-      this.height = sysInfo.windowHeight - 100;
+      // 使用推荐 API：获取窗口信息替代 getSystemInfoSync，避免废弃警告
+      try {
+        const win = uni.getWindowInfo();
+        // 画布宽度设为窗口宽度；高度根据业务需要留出下方空间
+        this.width = win.windowWidth;
+        this.height = win.windowHeight - 100;
+      } catch (e) {
+        // 兜底：若获取失败，使用默认尺寸，确保功能可用
+        console.warn('获取窗口信息失败，使用默认尺寸:', e && e.message);
+        this.width = 300;
+        this.height = 400;
+      }
 
       this.ctx = uni.createCanvasContext('signatureCanvas', this);
       this.clearCanvas();
