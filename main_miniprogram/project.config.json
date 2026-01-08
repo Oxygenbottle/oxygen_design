@@ -29,7 +29,7 @@
     }
   },
   "appid": "wxef8dea5b10d63390",
-  "libVersion": "latest",
+  "libVersion": "3.11.0",
   "packOptions": {
     "ignore": [
       {

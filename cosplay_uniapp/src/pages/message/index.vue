@@ -13,6 +13,7 @@ export default {
       inited: false,
     };
   },
+  onLoad() {},
   methods: {},
 };
 </script>

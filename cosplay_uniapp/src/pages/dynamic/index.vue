@@ -12,13 +12,12 @@ export default {
       inited: false
     };
   },
+  onLoad() {},
   methods: {
     toPDF() {
-      // 在分包模式下跳转到 /subpackages/cosplay/pages/demo/index；在独立开发模式下跳转到 /pages/demo/index
-      // 通过工具函数根据环境自动生成正确的 URL
-      const { resolvePageUrl } = require('@/utils/route.js');
-      const url = resolvePageUrl('pages/demo/index');
-      uni.navigateTo({ url });
+      uni.navigateTo({
+        url: '/pages/demo/index'
+      });
     },
     onTapJumpMiniProgram: function () {
       wx.openEmbeddedMiniProgram({

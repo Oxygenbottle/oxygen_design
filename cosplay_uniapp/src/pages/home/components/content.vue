@@ -136,7 +136,6 @@ export default {
     // 缓存所有tab的位置信息
     cacheTabPositions() {
       const query = uni.createSelectorQuery().in(this);
-      console.log('获取所有tab-item的位置信息 ======= >', query);
       query.selectAll('.tab-item').boundingClientRect();
       query.exec((res) => {
         if (res && res[0]) {

@@ -9,6 +9,16 @@ module.exports = {
         "分包",
         "创意"
       ]
+    },
+    {
+      "name": "todolist",
+      "title": "TodoList 模块",
+      "description": "使用 UniApp+Vue3 的待办清单演示。",
+      "route": "/subpackages/todolist/pages/index/index",
+      "tags": [
+        "分包",
+        "创意"
+      ]
     }
   ]
 };

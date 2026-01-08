@@ -16,6 +16,7 @@ export default {
 
     };
   },
+  onLoad() { },
   methods: {
     openDialog() {
       this.$refs.ddList.open();

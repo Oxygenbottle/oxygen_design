@@ -1,10 +1,12 @@
 // 创意工坊页面：根据构建生成的列表渲染卡片
 // 读取构建脚本输出的 JS 模块（避免直接 require .json 造成运行时报错）
-let workshopList = { items: [] };
-try {
-  workshopList = require('../../assets/workshop-list.js');
-} catch (e) {
-  console.warn('未能加载 workshop-list.js，使用空列表');
+function getList() {
+  try {
+    try { delete require.cache && delete require.cache[require.resolve('../../assets/workshop-list.js')]; } catch (e) {}
+    return require('../../assets/workshop-list.js');
+  } catch (e) {
+    return { items: [] };
+  }
 }
 
 Page({
@@ -12,12 +14,12 @@ Page({
     items: [], // 卡片列表数据
   },
   onLoad() {
-    // 初始化加载列表
-    this.setData({ items: (workshopList && workshopList.items) || [] });
+    const wl = getList();
+    this.setData({ items: (wl && wl.items) || [] });
   },
   onShow() {
-    // 返回页面时也可刷新一次（防止热更新不同步）
-    this.setData({ items: (workshopList && workshopList.items) || [] });
+    const wl = getList();
+    this.setData({ items: (wl && wl.items) || [] });
   },
   openRoute(e) {
     // 打开卡片对应的路由（分包或主包页面）

@@ -1,0 +1,10 @@
+{
+  "name": "TodoList",
+  "appid": "__UNI_TODO__",
+  "mp-weixin": {
+    "appid": "",
+    "setting": {
+      "urlCheck": false
+    }
+  }
+}

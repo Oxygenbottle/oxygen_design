@@ -8,6 +8,7 @@
 </template>
 <script>
 import lottie from "lottie-miniprogram";
+import catAnimation from "@/assets/lottie/cat.js";
 let ani = null;
 export default {
   components: "",
@@ -17,9 +18,9 @@ export default {
       inited: false,
     };
   },
-  mounted() {
-      this.init();
-    },
+  onLoad() {
+    this.init();
+  },
   methods: {
     init() {
       if (this.inited) return;
@@ -39,7 +40,7 @@ export default {
           ani = lottie.loadAnimation({
             loop: true,
             autoplay: true,
-            animationData: require("../../assets/lottie/cat.js"),
+            animationData: catAnimation,
             // animationData: require('../../assets/lottie/icon_home.js'),
             rendererSettings: {
               context,

@@ -13,6 +13,14 @@
   </div>
 </template>
 <script>
+import iconCh from '@/assets/icons/materials/2star-ch.png'
+import iconFr from '@/assets/icons/materials/2star-fr.png'
+import iconHm from '@/assets/icons/materials/2star-hm.png'
+import iconTx from '@/assets/icons/materials/2star-tx.png'
+import iconXl from '@/assets/icons/materials/2star-xl.png'
+import iconXw from '@/assets/icons/materials/2star-xw.png'
+import iconZs from '@/assets/icons/materials/2star-zs.png'
+
 export default {
   data() {
     return {
@@ -23,35 +31,36 @@ export default {
       materialsList: [
         {
           label: '存护',
-          icon: require('@/assets/icons/materials/2star-ch.png')
+          icon: iconCh
         },
         {
           label: '丰饶',
-          icon: require('@/assets/icons/materials/2star-fr.png')
+          icon: iconFr
         },
         {
           label: '毁灭',
-          icon: require('@/assets/icons/materials/2star-hm.png')
+          icon: iconHm
         },
         {
           label: '同协',
-          icon: require('@/assets/icons/materials/2star-tx.png')
+          icon: iconTx
         },
         {
           label: '巡猎',
-          icon: require('@/assets/icons/materials/2star-xl.png')
+          icon: iconXl
         },
         {
           label: '虚无',
-          icon: require('@/assets/icons/materials/2star-xw.png')
+          icon: iconXw
         },
         {
           label: '智识',
-          icon: require('@/assets/icons/materials/2star-zs.png')
+          icon: iconZs
         }
       ]
     };
   },
+  onLoad() { },
   methods: {
     open() {
       this.pop_show = true;

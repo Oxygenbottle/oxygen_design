@@ -7,5 +7,14 @@
     "type": "subpackage",
     "checkPath": "subpackages/cosplay/pages/index/index.wxml",
     "enabled": true
+  },
+  {
+    "name": "todolist",
+    "title": "TodoList 模块",
+    "description": "使用 UniApp+Vue3 的待办清单演示。",
+    "route": "/subpackages/todolist/pages/index/index",
+    "type": "subpackage",
+    "checkPath": "subpackages/todolist/pages/index/index.wxml",
+    "enabled": true
   }
 ]

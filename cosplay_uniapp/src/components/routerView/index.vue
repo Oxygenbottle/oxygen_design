@@ -1,7 +1,6 @@
 <template>
   <div class="router-view" :style="{ opacity: opacity }">
-    <!-- 空值保护，避免在 router 未初始化时访问属性导致渲染报错 -->
-    <Navbar v-if="router && router.type === 'page'">{{ router.name }}</Navbar>
+    <Navbar v-if="router.type === 'page'">{{ router.name }}</Navbar>
     <Home v-if="currentPath === '/pages/home/index'"></Home>
     <Message v-else-if="currentPath === '/pages/message/index'"></Message>
     <Post v-else-if="currentPath === '/pages/post/index'"></Post>
@@ -17,7 +16,6 @@ import Message from '@/pages/message/index.vue';
 import Post from '@/pages/post/index.vue'
 import My from '@/pages/my/index.vue';
 import Dynamic from '@/pages/dynamic/index.vue';
-import { normalizePagePath } from '@/utils/route.js';
 
 export default {
   name: 'RouterView',
@@ -25,8 +23,7 @@ export default {
   props: {
     router: {
       type: Object,
-      // 注意：必须返回一个对象，否则默认值为 undefined 会导致 watch 初次触发时 newVal/oldVal 为 undefined
-      default: () => ({})
+      default: () => {}
     }
   },
   watch: {
@@ -38,9 +35,7 @@ export default {
         this.currentPath = ''
         // 等待淡出完成后，切换组件并开始淡入
         setTimeout(() => {
-          // 容错：newVal 可能为空对象或未定义，避免读取 undefined 的属性
-          const nextPath = (newVal && newVal.pagePath) ? normalizePagePath(newVal.pagePath) : '';
-          this.currentPath = nextPath;
+          this.currentPath = newVal.pagePath;
           this.opacity = 1;
         }, 300); // 这里的时间需要和CSS过渡时间一致
       },

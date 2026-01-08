@@ -12,43 +12,19 @@ const showError = (title) => {
   })
 }
 const request = axios.create({
-  baseURL: process.env.VUE_APP_API_BASE_URL,
-  timeout: Number(process.env.VUE_APP_API_TIMEOUT || 5000),
+  baseURL: import.meta.env.VITE_API_BASE_URL,
+  timeout: Number(import.meta.env.VITE_API_TIMEOUT || 5000),
   headers: {
     'Content-Type': 'application/json;charset=utf-8'
   },
   // 添加自定义适配器以支持UniApp环境
   adapter: function(config) {
     return new Promise((resolve, reject) => {
-      // 将 axios 的 headers（可能是 AxiosHeaders 或包含 common/get 等嵌套）转换为纯对象
-      const normalizeHeaders = (cfg) => {
-        const h = cfg.headers || {};
-        // axios v1 使用 AxiosHeaders，提供 toJSON 将其转为普通对象
-        if (typeof h.toJSON === 'function') {
-          return h.toJSON();
-        }
-        // 兼容 axios 老版本的 headers 结构：{ common: {}, get: {}, post: {} }
-        if (h.common || h[cfg.method] || h[cfg.method?.toUpperCase()] || h[cfg.method?.toLowerCase()]) {
-          const methodKey = (cfg.method?.toLowerCase()) || 'get';
-          const merged = { ...(h.common || {}) };
-          Object.assign(merged, h[methodKey] || h[methodKey?.toUpperCase()] || {});
-          // 合并顶层非保留键值（避免丢失自定义 header）
-          for (const k of Object.keys(h)) {
-            if (!['common','get','post','put','patch','delete','head'].includes(k)) {
-              merged[k] = h[k];
-            }
-          }
-          return merged;
-        }
-        // 普通对象或空对象直接返回拷贝，避免原型链问题
-        return { ...h };
-      };
-
       uni.request({
         method: config.method.toUpperCase(),
         // 修复当 baseURL 为空时拼接出错的问题
         url: (config.baseURL || '') + config.url,
-        header: normalizeHeaders(config),
+        header: config.headers,
         data: config.data,
         dataType: 'json',
         success: (response) => {

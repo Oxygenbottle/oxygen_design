@@ -41,5 +41,20 @@
     }
   ],
   "globalStyle": {},
+  "tabBar": {
+    "custom": true,
+    "color": "#000000",
+    "selectedColor": "#e9e9e9",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/my/index",
+        "text": "接口"
+      }
+    ]
+  },
   "uniIdRouter": {}
 }
