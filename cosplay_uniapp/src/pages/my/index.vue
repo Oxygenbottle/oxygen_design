@@ -4,19 +4,18 @@
   </view>
 </template>
 <script>
-import lottieCanvas from "../../components/lottieCanvas/lottieCanvas.vue";
+import lottieCanvas from '../../components/lottieCanvas/lottieCanvas.vue'
 export default {
   components: { lottieCanvas },
   data() {
     return {
-      title: "Hello",
+      title: 'Hello',
       inited: false,
-    };
+    }
   },
-  onLoad() {
-  },
+  onLoad() {},
   methods: {},
-};
+}
 </script>
 
 <style lang="scss" scoped>

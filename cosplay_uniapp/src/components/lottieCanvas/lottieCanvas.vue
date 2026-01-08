@@ -7,35 +7,35 @@
   </view>
 </template>
 <script>
-import lottie from "lottie-miniprogram";
-import catAnimation from "@/assets/lottie/cat.js";
-let ani = null;
+import lottie from 'lottie-miniprogram'
+import catAnimation from '@/assets/lottie/cat.js'
+let ani = null
 export default {
-  components: "",
+  components: '',
   data() {
     return {
-      title: "Hello",
+      title: 'Hello',
       inited: false,
-    };
+    }
   },
   onLoad() {
-    this.init();
+    this.init()
   },
   methods: {
     init() {
-      if (this.inited) return;
-      let canvasObj = this.createSelectorQuery().select("#canvas");
-      console.log("画布实例", canvasObj);
+      if (this.inited) return
+      let canvasObj = this.createSelectorQuery().select('#canvas')
+      console.log('画布实例', canvasObj)
       this.createSelectorQuery()
-        .select("#canvas")
+        .select('#canvas')
         .node((res) => {
-          console.log("canvas实例", res);
-          const canvas = res.node;
-          const context = canvas.getContext("2d");
-          canvas.width = 300;
-          canvas.height = 300;
-          lottie.setup(canvas); // lottie 获取canvas画布？
-          console.log(context, "函数内部 context");
+          console.log('canvas实例', res)
+          const canvas = res.node
+          const context = canvas.getContext('2d')
+          canvas.width = 300
+          canvas.height = 300
+          lottie.setup(canvas) // lottie 获取canvas画布？
+          console.log(context, '函数内部 context')
           // console.log(that.ani2,'函数内部ani2')
           ani = lottie.loadAnimation({
             loop: true,
@@ -45,20 +45,20 @@ export default {
             rendererSettings: {
               context,
             },
-          });
+          })
 
-          this.inited = true;
+          this.inited = true
         })
-        .exec();
+        .exec()
     },
     play() {
-      ani.play();
+      ani.play()
     },
     pause() {
-      ani.pause();
+      ani.pause()
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

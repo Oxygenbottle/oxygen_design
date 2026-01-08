@@ -6,10 +6,11 @@
         {{ item.label }}
       </div>
     </div>
-    <div class="shadow_box" :class="[
-    animationShow ? 'fadeIn' : 'fadeOut',
-    shadowShow ? 'shadow_box_on' : ''
-  ]" @click="close"></div>
+    <div
+      class="shadow_box"
+      :class="[animationShow ? 'fadeIn' : 'fadeOut', shadowShow ? 'shadow_box_on' : '']"
+      @click="close"
+    ></div>
   </div>
 </template>
 <script>
@@ -31,53 +32,53 @@ export default {
       materialsList: [
         {
           label: '存护',
-          icon: iconCh
+          icon: iconCh,
         },
         {
           label: '丰饶',
-          icon: iconFr
+          icon: iconFr,
         },
         {
           label: '毁灭',
-          icon: iconHm
+          icon: iconHm,
         },
         {
           label: '同协',
-          icon: iconTx
+          icon: iconTx,
         },
         {
           label: '巡猎',
-          icon: iconXl
+          icon: iconXl,
         },
         {
           label: '虚无',
-          icon: iconXw
+          icon: iconXw,
         },
         {
           label: '智识',
-          icon: iconZs
-        }
-      ]
-    };
+          icon: iconZs,
+        },
+      ],
+    }
   },
-  onLoad() { },
+  onLoad() {},
   methods: {
     open() {
-      this.pop_show = true;
-      this.animationShow = true;
+      this.pop_show = true
+      this.animationShow = true
       setTimeout(() => {
-        this.shadowShow = true;
-      }, 300);
+        this.shadowShow = true
+      }, 300)
     },
     close() {
-      this.shadowShow = false;
-      this.animationShow = false;
+      this.shadowShow = false
+      this.animationShow = false
       setTimeout(() => {
-        this.pop_show = false;
-      }, 290);
-    }
-  }
-};
+        this.pop_show = false
+      }, 290)
+    },
+  },
+}
 </script>
 
 <style lang="scss" scoped>

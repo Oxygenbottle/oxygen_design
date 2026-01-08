@@ -8,17 +8,17 @@ const showError = (title) => {
   uni.showToast({
     title,
     icon: 'none',
-    duration: 3000
+    duration: 3000,
   })
 }
 const request = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: Number(import.meta.env.VITE_API_TIMEOUT || 5000),
   headers: {
-    'Content-Type': 'application/json;charset=utf-8'
+    'Content-Type': 'application/json;charset=utf-8',
   },
   // 添加自定义适配器以支持UniApp环境
-  adapter: function(config) {
+  adapter: function (config) {
     return new Promise((resolve, reject) => {
       uni.request({
         method: config.method.toUpperCase(),
@@ -33,25 +33,25 @@ const request = axios.create({
             status: response.statusCode,
             statusText: 'OK',
             headers: response.header,
-            config: config
-          });
+            config: config,
+          })
         },
         fail: (error) => {
-          reject(new Error(error.errMsg || 'Network Error'));
-        }
-      });
-    });
-  }
+          reject(new Error(error.errMsg || 'Network Error'))
+        },
+      })
+    })
+  },
 })
 
 // 请求拦截器
 request.interceptors.request.use(
-  config => {
+  (config) => {
     // 显示加载动画（使用UniApp原生API）
     if (config.showLoading !== false) {
       uni.showLoading({
         title: config.loadingText || '加载中...',
-        mask: true
+        mask: true,
       })
     }
 
@@ -67,18 +67,18 @@ request.interceptors.request.use(
 
     return config
   },
-  error => {
+  (error) => {
     uni.hideLoading()
     showError('请求配置错误')
     return Promise.reject(error)
-  }
+  },
 )
 
 // 响应拦截器
 request.interceptors.response.use(
-  response => {
+  (response) => {
     uni.hideLoading()
-    
+
     if (response.status !== 200) {
       showError(response.statusText || '操作失败')
 
@@ -92,13 +92,13 @@ request.interceptors.response.use(
 
     return response.data
   },
-  error => {
+  (error) => {
     uni.hideLoading()
     const errorMsg = handleError(error)
-    console.log('errorMsg ==== >> ', errorMsg);
+    console.log('errorMsg ==== >> ', errorMsg)
     showError(errorMsg)
     return Promise.reject(error)
-  }
+  },
 )
 
 // 错误处理函数
@@ -130,21 +130,37 @@ function handleError(error) {
 
 // 导出常用请求方法
 export const api = {
-  get: (url, params = {}, config = {}) => request({
-    url, params, method: 'get', ...config
-  }),
+  get: (url, params = {}, config = {}) =>
+    request({
+      url,
+      params,
+      method: 'get',
+      ...config,
+    }),
 
-  post: (url, data = {}, config = {}) => request({
-    url, data, method: 'post', ...config
-  }),
+  post: (url, data = {}, config = {}) =>
+    request({
+      url,
+      data,
+      method: 'post',
+      ...config,
+    }),
 
-  put: (url, data = {}, config = {}) => request({
-    url, data, method: 'put', ...config
-  }),
+  put: (url, data = {}, config = {}) =>
+    request({
+      url,
+      data,
+      method: 'put',
+      ...config,
+    }),
 
-  delete: (url, params = {}, config = {}) => request({
-    url, params, method: 'delete', ...config
-  }),
+  delete: (url, params = {}, config = {}) =>
+    request({
+      url,
+      params,
+      method: 'delete',
+      ...config,
+    }),
 
   upload: (url, file, config = {}) => {
     const formData = new FormData()
@@ -154,11 +170,11 @@ export const api = {
       method: 'post',
       data: formData,
       headers: { 'Content-Type': 'multipart/form-data' },
-      ...config
+      ...config,
     })
   },
 
-  cancelToken: () => axios.CancelToken.source()
+  cancelToken: () => axios.CancelToken.source(),
 }
 
 export const cancelRequest = (source) => {

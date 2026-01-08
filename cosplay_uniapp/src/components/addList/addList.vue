@@ -7,22 +7,21 @@
   </div>
 </template>
 <script>
-import ddList from "../ddList/ddList.vue";
+import ddList from '../ddList/ddList.vue'
 export default {
   components: { ddList },
   data() {
     return {
-      title: "+",
-
-    };
+      title: '+',
+    }
   },
-  onLoad() { },
+  onLoad() {},
   methods: {
     openDialog() {
-      this.$refs.ddList.open();
+      this.$refs.ddList.open()
     },
   },
-};
+}
 </script>
 
 <style>

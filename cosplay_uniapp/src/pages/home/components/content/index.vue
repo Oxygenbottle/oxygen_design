@@ -1,6 +1,5 @@
 <template>
   <div class="content-container">
-    <!-- 内容选项卡 -->
     <div class="content-tabs">
       <scroll-view
         class="scroll-view"
@@ -17,7 +16,6 @@
         >
           {{ tab.label }}
         </div>
-        <!-- 移动的小蓝条 -->
         <div class="tab-indicator" :style="indicatorStyle"></div>
       </scroll-view>
     </div>
@@ -32,39 +30,29 @@
       :style="'background:#fff'"
       @animationfinish="(e) => swiperChangeEnd(e)"
     >
-      <swiper-item
-        class="swiper-item"
-        v-for="(tab, index) in classList"
-        :key="index"
-      >
-        <post-item
-          v-for="post in postList"
-          :key="post.id"
-          :post="post"
-        ></post-item>
+      <swiper-item class="swiper-item" v-for="(tab, index) in classList" :key="index">
+        <post-item v-for="post in postList" :key="post.id" :post="post"></post-item>
       </swiper-item>
     </swiper>
   </div>
 </template>
 
 <script>
-// 导入模拟数据和组件
-import mockData from '../mock.js';
-import postItem from './postItem.vue';
+import postItem from '../postItem/index.vue'
 
 export default {
   components: {
-    postItem
+    postItem,
   },
   props: {
     outerSwiperIndex: {
       type: Number,
-      default: 0
+      default: 0,
     },
     classList: {
       type: Array,
-      default: []
-    }
+      default: [],
+    },
   },
   data() {
     return {
@@ -76,139 +64,115 @@ export default {
         { name: '出图' },
         { name: '咖啡馆' },
         { name: '分享' },
-        { name: '讨论' }
+        { name: '讨论' },
       ],
       activeIndex: 0,
       currentTabWidth: 0,
       currentTabLeft: 0,
-      tabPositions: [], // 缓存所有tab的位置信息
-      isScrolling: false, // 标记是否正在滚动
-      systemInfo: {}, // 系统信息
-      scrollLeft: 0, // 用于控制scroll-view的滚动位置
-      postList: mockData.postData, // 使用模拟数据
-      _outerSwiperIndex: 0
-    };
+      tabPositions: [],
+      isScrolling: false,
+      systemInfo: {},
+      scrollLeft: 0,
+      postList: [],
+      _outerSwiperIndex: 0,
+    }
   },
   async mounted() {
-    // 获取系统信息
-    await this.getSystemInfo();
-    // 初始化时缓存所有tab位置
-    this.cacheTabPositions();
+    await this.getSystemInfo()
+    this.cacheTabPositions()
   },
   computed: {
     indicatorStyle() {
-      const _pageWidth = this.systemInfo.windowWidth * this._outerSwiperIndex;
-      const left =
-        this.currentTabLeft + this.currentTabWidth / 2 - 24 - _pageWidth;
-      return `left: ${left}px;`;
+      const _pageWidth = this.systemInfo.windowWidth * this._outerSwiperIndex
+      const left = this.currentTabLeft + this.currentTabWidth / 2 - 24 - _pageWidth
+      return `left: ${left}px;`
     },
-    // 视口中心位置
     viewportCenter() {
-      return this.systemInfo.windowWidth / 2 || 300;
-    }
+      return this.systemInfo.windowWidth / 2 || 300
+    },
   },
   watch: {
     outerSwiperIndex: {
-      handler(newVal, oldVal) {
-        console.log('获取外层swiper的索引 ======= >', newVal);
-        // this.updateTabIndicator(0);
-        this._outerSwiperIndex = newVal;
+      handler(newVal) {
+        console.log('获取外层swiper的索引 ======= >', newVal)
+        this._outerSwiperIndex = newVal
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   methods: {
-    // 获取系统信息
     getSystemInfo() {
       try {
-        const windowWidth = uni.getStorageSync('windowWidth');
-        // 保留原有字段结构，确保兼容性
+        const windowWidth = uni.getStorageSync('windowWidth')
         this.systemInfo = {
-          windowWidth
-        };
+          windowWidth,
+        }
       } catch (e) {
-        console.error('获取系统信息失败', e);
-        // 提供默认值
-        this.systemInfo = { windowWidth: 375 };
+        console.error('获取系统信息失败', e)
+        this.systemInfo = { windowWidth: 375 }
       }
     },
 
-    // 缓存所有tab的位置信息
     cacheTabPositions() {
-      const query = uni.createSelectorQuery().in(this);
-      query.selectAll('.tab-item').boundingClientRect();
+      const query = uni.createSelectorQuery().in(this)
+      query.selectAll('.tab-item').boundingClientRect()
       query.exec((res) => {
         if (res && res[0]) {
-          this.tabPositions = res[0];
-          this.updateTabIndicator(0);
+          this.tabPositions = res[0]
+          this.updateTabIndicator(0)
         } else {
-          // 重试机制
           setTimeout(() => {
-            this.cacheTabPositions();
-          }, 100);
+            this.cacheTabPositions()
+          }, 100)
         }
-      });
+      })
     },
 
-    // 更新指示器位置
     updateTabIndicator(index) {
       if (this.tabPositions[index]) {
-        console.log('index ======= >', index);
-        const rect = this.tabPositions[index];
-        this.currentTabWidth = rect.width;
-        this.currentTabLeft = rect.left;
+        console.log('index ======= >', index)
+        const rect = this.tabPositions[index]
+        this.currentTabWidth = rect.width
+        this.currentTabLeft = rect.left
       }
     },
 
-    // 处理tab点击
     handleClickTab(index) {
-      if (this.isScrolling) return;
+      if (this.isScrolling) return
 
-      this.activeIndex = index;
-      this.updateTabIndicator(index);
-
-      // 滚动到选中的tab（如果需要）
-      this.scrollToTab(index);
+      this.activeIndex = index
+      this.updateTabIndicator(index)
+      this.scrollToTab(index)
     },
 
-    // 滚动到指定tab
     scrollToTab(index) {
-      if (!this.tabPositions[index]) return;
+      if (!this.tabPositions[index]) return
 
-      const rect = this.tabPositions[index];
-      const tabCenter = rect.left + rect.width / 2;
+      const rect = this.tabPositions[index]
+      const tabCenter = rect.left + rect.width / 2
       const newScrollLeft =
-        tabCenter -
-        this.viewportCenter -
-        this.systemInfo.windowWidth * this._outerSwiperIndex;
+        tabCenter - this.viewportCenter - this.systemInfo.windowWidth * this._outerSwiperIndex
 
-      // 使用数据绑定方式滚动scroll-view
-      this.isScrolling = true;
-      this.scrollLeft = newScrollLeft;
+      this.isScrolling = true
+      this.scrollLeft = newScrollLeft
 
-      // 滚动动画结束后重置标记
       setTimeout(() => {
-        this.isScrolling = false;
-      }, 300);
+        this.isScrolling = false
+      }, 300)
     },
 
-    // swiper滚动结束
     swiperChangeEnd(e) {
-      this.activeIndex = e.detail.current;
-      // 重新缓存tab位置信息
-      // this.cacheTabPositions();
-      // 延迟更新指示器，确保位置信息已更新
+      this.activeIndex = e.detail.current
       setTimeout(() => {
-        this.scrollToTab(e.detail.current);
-        this.updateTabIndicator(e.detail.current);
-      }, 0);
-    }
-  }
-};
+        this.scrollToTab(e.detail.current)
+        this.updateTabIndicator(e.detail.current)
+      }, 0)
+    },
+  },
+}
 </script>
 
 <style lang="scss" scoped>
-/* 内容容器 */
 .content-container {
   display: flex;
   flex-direction: column;
@@ -221,11 +185,9 @@ export default {
 .swiper-item {
   padding: 0 16rpx;
   box-sizing: border-box;
-  // height: 100%;
   overflow-y: scroll;
 }
 
-/* 内容选项卡 */
 .content-tabs {
   display: flex;
   padding: 0 30rpx;
@@ -237,7 +199,6 @@ export default {
   top: 0;
   left: 0;
   z-index: 11;
-  // 隐藏滚动条
   -ms-overflow-style: none;
   scrollbar-width: none;
   &::-webkit-scrollbar {
@@ -283,7 +244,6 @@ export default {
   }
 }
 
-/* 内容列表 */
 .content-list {
   height: 100%;
   flex: 1;
@@ -293,7 +253,6 @@ export default {
   box-sizing: border-box;
 }
 
-/* 帖子样式 */
 .post-item {
   width: 100%;
   background: #fff;
@@ -425,3 +384,4 @@ export default {
   }
 }
 </style>
+

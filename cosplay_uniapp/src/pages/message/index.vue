@@ -1,21 +1,17 @@
 <template>
-  <view class="content">
-    消息
-
-  </view>
+  <view class="content">消息</view>
 </template>
 <script>
 export default {
-  components: {  },
   data() {
     return {
-      title: "Hello",
+      title: 'Hello',
       inited: false,
-    };
+    }
   },
   onLoad() {},
   methods: {},
-};
+}
 </script>
 
 <style lang="scss" scoped>

@@ -18,9 +18,7 @@
       @animationfinish="(e) => swiperChangeEnd(e)"
     >
       <swiper-item v-for="(item, index) in dataList" :key="index">
-        <div
-          :style="{ height: `calc(${topPadding}rpx + ${navBarHeight}rpx)` }"
-        ></div>
+        <div :style="{ height: `calc(${topPadding}rpx + ${navBarHeight}rpx)` }"></div>
         <img class="bg" :style="imgStyle" :src="item.topBg" />
         <pageContainer :outerSwiperIndex="index" :data="item"></pageContainer>
       </swiper-item>
@@ -35,10 +33,9 @@
 </template>
 
 <script>
-import { navbar } from './components/navbar.vue';
-import { pageContainer } from './components/pageContainer.vue';
-import { getHomeData } from '../../../mock/homeData.js';
-import { getHomeInfo } from '@/api/public.js';
+import navbar from './components/navbar/index.vue'
+import pageContainer from './components/pageContainer/index.vue'
+import { getHomeInfo } from '@/api/public.js'
 
 export default {
   components: { navbar, pageContainer },
@@ -49,53 +46,50 @@ export default {
       topPadding: 0,
       navBarHeight: 0,
       imgStyle: '',
-      loading: false
-    };
+      loading: false,
+    }
   },
   created() {
     try {
-      const navBarInfo = uni.getStorageSync('navBarInfo');
+      const navBarInfo = uni.getStorageSync('navBarInfo')
       if (navBarInfo) {
-        this.topPadding = navBarInfo.statusBarHeight + navBarInfo.navBarHeight;
-        this.navBarHeight = navBarInfo.navBarHeight;
-        this.imgStyle = `margin-top: -${this.topPadding}rpx`;
+        this.topPadding = navBarInfo.statusBarHeight + navBarInfo.navBarHeight
+        this.navBarHeight = navBarInfo.navBarHeight
+        this.imgStyle = `margin-top: -${this.topPadding}rpx`
       } else {
-        console.warn('缓存中未找到导航栏信息');
+        console.warn('缓存中未找到导航栏信息')
       }
-      // 加载模拟数据
-      this.loadHomeData();
+      this.loadHomeData()
     } catch (e) {
-      console.error('获取缓存数据失败', e);
+      console.error('获取缓存数据失败', e)
     }
   },
   methods: {
     swiperChangeEnd(e) {
       // console.log('swiperChangeEnd ====== >', e);
-      this.currentIndex = e.detail.current;
+      this.currentIndex = e.detail.current
     },
     changeTab(index) {
-      this.currentIndex = index;
+      this.currentIndex = index
     },
     async loadHomeData() {
-      this.loading = true;
+      this.loading = true
       try {
-        // 调用模拟数据API
-        const response = await getHomeInfo();
+        const response = await getHomeInfo()
         if (response.success) {
-          this.dataList = response.data;
-          console.log('成功加载首页模拟数据:', this.dataList);
-          // 这里可以根据需要处理模拟数据，比如更新导航栏列表等
+          this.dataList = response.data
+          console.log('成功加载首页数据:', this.dataList)
         } else {
-          console.error('加载模拟数据失败:', response.message);
+          console.error('加载模拟数据失败:', response.message)
         }
       } catch (error) {
-        console.error('请求模拟数据时发生错误:', error);
+        console.error('请求模拟数据时发生错误:', error)
       } finally {
-        this.loading = false;
+        this.loading = false
       }
-    }
-  }
-};
+    },
+  },
+}
 </script>
 
 <style lang="scss" scoped>

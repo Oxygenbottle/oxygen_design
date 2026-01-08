@@ -1,15 +1,15 @@
-import request from './request';
+import request from './request'
 
 export const getTabbarInfo = () => {
   return request({
     url: '/tabbar/',
-    method: 'get'
-  });
-};
+    method: 'get',
+  })
+}
 
 export const getHomeInfo = () => {
   return request({
     url: '/home/data',
-    method: 'get'
-  });
-};
+    method: 'get',
+  })
+}

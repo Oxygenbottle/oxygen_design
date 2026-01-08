@@ -18,19 +18,19 @@
     {
       "path": "pages/my/index",
       "style": {
-        "navigationBarTitleText": "my"
+        "navigationStyle": "custom"
       }
     },
     {
       "path": "pages/dynamic/index",
       "style": {
-        "navigationBarTitleText": "dynamic"
+        "navigationStyle": "custom"
       }
     },
     {
       "path": "pages/message/index",
       "style": {
-        "navigationBarTitleText": "message"
+        "navigationStyle": "custom"
       }
     },
     {
@@ -41,20 +41,5 @@
     }
   ],
   "globalStyle": {},
-  "tabBar": {
-    "custom": true,
-    "color": "#000000",
-    "selectedColor": "#e9e9e9",
-    "list": [
-      {
-        "pagePath": "pages/index/index",
-        "text": "首页"
-      },
-      {
-        "pagePath": "pages/my/index",
-        "text": "接口"
-      }
-    ]
-  },
   "uniIdRouter": {}
 }

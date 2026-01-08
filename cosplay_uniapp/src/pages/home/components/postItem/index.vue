@@ -15,11 +15,7 @@
       <text v-if="post.title" class="post-title">{{ post.title }}</text>
       <text class="post-text">{{ post.content }}</text>
       <view v-if="post.media" class="post-media">
-        <image
-          :src="post.media.src"
-          mode="aspectFill"
-          class="video-cover"
-        ></image>
+        <image :src="post.media.src" mode="aspectFill" class="video-cover"></image>
         <view v-if="post.media.duration" class="video-duration">{{ post.media.duration }}</view>
       </view>
       <view v-if="post.stats" class="post-stats">
@@ -46,14 +42,13 @@ export default {
   props: {
     post: {
       type: Object,
-      required: false
-    }
-  }
-};
+      required: false,
+    },
+  },
+}
 </script>
 
 <style lang="scss" scoped>
-/* 帖子样式 */
 .post-item {
   width: 100%;
   background: #fff;
@@ -185,3 +180,4 @@ export default {
   }
 }
 </style>
+

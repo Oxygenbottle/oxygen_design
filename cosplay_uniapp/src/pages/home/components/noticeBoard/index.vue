@@ -24,22 +24,18 @@ export default {
   props: {
     data: {
       type: Array,
-      default: []
-    }
+      default: [],
+    },
   },
   methods: {
-    // 处理"全部"按钮点击事件
     handleMore: () => {
-      // 这里可以添加跳转到全部资讯页面的逻辑
-      console.log('跳转到全部资讯页面');
-      // 例如：uni.navigateTo({ url: '/pages/news/list' });
-    }
-  }
-};
+      console.log('跳转到全部资讯页面')
+    },
+  },
+}
 </script>
 
 <style scoped lang="scss">
-/* 资讯横幅 */
 .news-banner {
   background-color: #ffffff4e;
   color: white;
@@ -50,7 +46,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   border-radius: 15rpx;
-  height: 60rpx; // 固定高度以适应轮播效果
+  height: 60rpx;
   .news-swiper {
     width: 100%;
     height: 60rpx;
@@ -94,3 +90,4 @@ export default {
   }
 }
 </style>
+

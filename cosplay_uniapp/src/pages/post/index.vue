@@ -8,12 +8,12 @@ export default {
   components: {},
   data() {
     return {
-      title: 'Hello'
-    };
+      title: 'Hello',
+    }
   },
   onLoad() {},
-  methods: {}
-};
+  methods: {},
+}
 </script>
 
 <style lang="scss" scoped>
