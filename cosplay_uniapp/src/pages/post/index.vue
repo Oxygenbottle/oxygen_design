@@ -3,18 +3,7 @@
     <button>确认并签订协议</button>
   </view>
 </template>
-<script>
-export default {
-  components: {},
-  data() {
-    return {
-      title: 'Hello',
-    }
-  },
-  onLoad() {},
-  methods: {},
-}
-</script>
+<script setup></script>
 
 <style lang="scss" scoped>
 .content {

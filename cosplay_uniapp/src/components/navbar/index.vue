@@ -4,33 +4,26 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'Navbar',
-  data() {
-    return {
-      navBarHeight: '',
-      title: '首页',
+<script setup>
+import { onMounted, ref } from 'vue'
+
+const navBarHeight = ref('')
+
+onMounted(() => {
+  try {
+    const navBarInfo = uni.getStorageSync('navBarInfo')
+    if (navBarInfo) {
+      navBarHeight.value = `height: ${navBarInfo.navBarHeight * 2}rpx`
+      console.log('导航栏从缓存获取到的系统信息:', navBarInfo)
+    } else {
+      navBarHeight.value = `height: 88rpx`
+      console.log('导航栏缓存不存在，使用默认值')
     }
-  },
-  created() {
-    try {
-      const navBarInfo = uni.getStorageSync('navBarInfo')
-      if (navBarInfo) {
-        this.navBarHeight = `height: ${navBarInfo.navBarHeight * 2}rpx`
-        console.log('导航栏从缓存获取到的系统信息:', navBarInfo)
-      } else {
-        // 缓存不存在时设置默认值
-        this.navBarHeight = `height: 88rpx` // 默认导航栏高度
-        console.log('导航栏缓存不存在，使用默认值')
-      }
-    } catch (e) {
-      // 出错时设置默认值
-      console.error('获取缓存数据失败', e)
-      this.navBarHeight = `height: 88rpx` // 默认导航栏高度
-    }
-  },
-}
+  } catch (e) {
+    console.error('获取缓存数据失败', e)
+    navBarHeight.value = `height: 88rpx`
+  }
+})
 </script>
 
 <style lang="scss" scoped>

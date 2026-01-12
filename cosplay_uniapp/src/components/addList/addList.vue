@@ -1,26 +1,20 @@
 <template>
   <div class="add-content">
-    <div class="text-area" @click="openDialog">
+    <div class="text-area" @tap="openDialog">
       <span class="title">{{ title }}</span>
     </div>
-    <ddList ref="ddList"></ddList>
+    <ddList ref="ddListRef"></ddList>
   </div>
 </template>
-<script>
+<script setup>
+import { ref } from 'vue'
 import ddList from '../ddList/ddList.vue'
-export default {
-  components: { ddList },
-  data() {
-    return {
-      title: '+',
-    }
-  },
-  onLoad() {},
-  methods: {
-    openDialog() {
-      this.$refs.ddList.open()
-    },
-  },
+
+const title = ref('+')
+const ddListRef = ref(null)
+
+const openDialog = () => {
+  ddListRef.value?.open?.()
 }
 </script>
 

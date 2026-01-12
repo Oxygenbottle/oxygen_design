@@ -15,181 +15,180 @@
   </view>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      ctx: null,
-      width: 300,
-      height: 400,
-      isDrawing: false,
-      hasDrawn: false,
-      lastX: 0,
-      lastY: 0,
-    }
-  },
-  mounted() {
-    this.initCanvas()
-  },
-  methods: {
-    initCanvas() {
-      const sysInfo = uni.getSystemInfoSync()
-      this.width = sysInfo.windowWidth
-      this.height = sysInfo.windowHeight - 100
+<script setup>
+import { getCurrentInstance, onMounted, ref } from 'vue'
 
-      this.ctx = uni.createCanvasContext('signatureCanvas', this)
-      this.clearCanvas()
+const emit = defineEmits(['signatureComplete'])
 
-      // 初始化绘制样式
-      this.ctx.setStrokeStyle('#000000')
-      this.ctx.setLineWidth(3)
-      this.ctx.setLineCap('round')
-      this.ctx.setLineJoin('round')
+const ctx = ref(null)
+const width = ref(300)
+const height = ref(400)
+const isDrawing = ref(false)
+const hasDrawn = ref(false)
+const lastX = ref(0)
+const lastY = ref(0)
+const drawState = ref('ready')
+
+const instance = getCurrentInstance()
+const ctxScope = instance?.proxy || instance
+
+onMounted(() => {
+  initCanvas()
+})
+
+const initCanvas = () => {
+  const sysInfo = uni.getSystemInfoSync()
+  width.value = sysInfo.windowWidth
+  height.value = sysInfo.windowHeight - 100
+
+  ctx.value = uni.createCanvasContext('signatureCanvas', ctxScope)
+  clearCanvas()
+
+  ctx.value.setStrokeStyle('#000000')
+  ctx.value.setLineWidth(3)
+  ctx.value.setLineCap('round')
+  ctx.value.setLineJoin('round')
+}
+
+const clearCanvas = () => {
+  if (!ctx.value) return
+
+  isDrawing.value = false
+  hasDrawn.value = false
+
+  ctx.value.clearRect(0, 0, width.value, height.value)
+  ctx.value.setFillStyle('#ffffff')
+  ctx.value.fillRect(0, 0, width.value, height.value)
+
+  ctx.value.setTextBaseline('top')
+  ctx.value.setTextAlign('center')
+  ctx.value.setFontSize(20)
+  ctx.value.setFillStyle('#616165')
+  ctx.value.fillText('请在灰色区域内完成签名', width.value / 2, 30)
+  ctx.value.draw(true)
+}
+
+const catchtouchstart = (e) => {
+  if (!ctx.value) return
+
+  e.stopPropagation()
+  e.preventDefault()
+  console.log('开始绘制签名')
+
+  const touch = e.changedTouches[0]
+  const x = touch.x
+  const y = touch.y
+
+  if (!hasDrawn.value) {
+    ctx.value.clearRect(0, 0, width.value, height.value)
+    ctx.value.setFillStyle('#ffffff')
+    ctx.value.fillRect(0, 0, width.value, height.value)
+    ctx.value.draw(true)
+  }
+
+  isDrawing.value = true
+  lastX.value = x
+  lastY.value = y
+
+  ctx.value.beginPath()
+  ctx.value.moveTo(x, y)
+}
+
+const catchtouchmove = (e) => {
+  if (!ctx.value) return
+  if (drawState.value === 'stop') return
+
+  drawState.value = 'ing'
+  if (e.touches.length > 1) return
+
+  ctx.value.setStrokeStyle('#000000')
+  ctx.value.setLineWidth(3)
+  ctx.value.setShadow(0, 0, 0.5, '#000000')
+  ctx.value.setLineCap('round')
+  ctx.value.setLineJoin('round')
+  ctx.value.lineTo(e.changedTouches[0].clientX, e.changedTouches[0].clientY)
+  ctx.value.stroke()
+  ctx.value.draw(true)
+  ctx.value.moveTo(e.changedTouches[0].clientX, e.changedTouches[0].clientY)
+}
+
+const catchtouchend = (e) => {
+  if (!ctx.value) return
+  if (!isDrawing.value) return
+
+  e.stopPropagation()
+  e.preventDefault()
+
+  isDrawing.value = false
+  hasDrawn.value = true
+
+  ctx.value.draw(true)
+  drawState.value = 'ready'
+}
+
+const ocrVK = () => {
+  const session = wx.createVKSession({
+    track: {
+      OCR: { mode: 2 },
     },
+  })
 
-    clearCanvas() {
-      this.isDrawing = false
-      this.hasDrawn = false
+  session.on('updateAnchors', (anchors) => {
+    console.log('anchors.text', ''.concat(anchors.map((anchor) => anchor.text)))
+  })
 
-      this.ctx.clearRect(0, 0, this.width, this.height)
-      this.ctx.setFillStyle('#ffffff')
-      this.ctx.fillRect(0, 0, this.width, this.height)
+  session.start((errno) => {
+    if (errno) return
+    session.runOCR({
+      frameBuffer,
+      width,
+      height,
+    })
+  })
+}
 
-      this.ctx.setTextBaseline('top')
-      this.ctx.setTextAlign('center')
-      this.ctx.setFontSize(20)
-      this.ctx.setFillStyle('#616165')
-      this.ctx.fillText('请在灰色区域内完成签名', this.width / 2, 30)
-      this.ctx.draw(true)
-    },
+const canvasToImg = () => {
+  if (!hasDrawn.value) {
+    uni.showToast({
+      title: '请先完成签名',
+      icon: 'none',
+    })
+    return
+  }
 
-    catchtouchstart(e) {
-      e.stopPropagation()
-      e.preventDefault()
-      console.log('开始绘制签名')
-      const touch = e.changedTouches[0]
-      const x = touch.x
-      const y = touch.y
+  drawState.value = 'stop'
 
-      // 清除提示文字（仅在第一次触摸时）
-      if (!this.hasDrawn) {
-        this.ctx.clearRect(0, 0, this.width, this.height)
-        this.ctx.setFillStyle('#ffffff')
-        this.ctx.fillRect(0, 0, this.width, this.height)
-        this.ctx.draw(true)
-      }
-
-      this.isDrawing = true
-      this.lastX = x
-      this.lastY = y
-
-      // 开始新路径
-      this.ctx.beginPath()
-      this.ctx.moveTo(x, y)
-    },
-
-    catchtouchmove(e) {
-      if (this.drawState == 'stop') return
-      this.drawState = 'ing'
-      if (e.touches.length > 1) {
-        return
-      }
-      this.ctx.setStrokeStyle('#000000')
-      this.ctx.setLineWidth(3)
-      this.ctx.setShadow(0, 0, 0.5, '#000000')
-      this.ctx.setLineCap('round')
-      this.ctx.setLineJoin('round')
-      this.ctx.lineTo(e.changedTouches[0].clientX, e.changedTouches[0].clientY)
-      this.ctx.stroke()
-      this.ctx.draw(true)
-      this.ctx.moveTo(e.changedTouches[0].clientX, e.changedTouches[0].clientY)
-    },
-
-    catchtouchend(e) {
-      if (!this.isDrawing) return
-      e.stopPropagation()
-      e.preventDefault()
-
-      this.isDrawing = false
-      this.hasDrawn = true
-
-      // 确保最终绘制
-      this.ctx.draw(true)
-      this.drawState = 'ready'
-    },
-    // OCR识别
-    ocrVK() {
-      const session = wx.createVKSession({
-        track: {
-          OCR: { mode: 2 }, // mode: 1 - 使用摄像头；2 - 手动传入图像
+  setTimeout(() => {
+    try {
+      uni.canvasToTempFilePath(
+        {
+          canvasId: 'signatureCanvas',
+          x: 0,
+          y: 0,
+          width: width.value,
+          height: height.value,
+          destWidth: width.value * 2,
+          destHeight: height.value * 2,
+          fileType: 'png',
+          quality: 1,
+          success: (res) => {
+            console.log('确认签名', res.tempFilePath)
+            emit('signatureComplete', res.tempFilePath)
+          },
+          fail: (err) => {
+            console.log('canvas转换失败', err)
+            uni.showToast({
+              title: '生成签名失败',
+              icon: 'none',
+            })
+          },
         },
-      })
-
-      // 静态图片检测模式下，每调一次 runOCR 接口就会触发一次 updateAnchors 事件
-      session.on('updateAnchors', (anchors) => {
-        console.log('anchors.text', ''.concat(anchors.map((anchor) => anchor.text)))
-      })
-
-      // 需要调用一次 start 以启动
-      session.start((errno) => {
-        if (errno) {
-          // 如果失败，将返回 errno
-        } else {
-          // 否则，返回null，表示成功
-          session.runOCR({
-            frameBuffer, // 图片 ArrayBuffer 数据。待检测图像的像素点数据，每四项表示一个像素点的 RGBA
-            width, // 图像宽度
-            height, // 图像高度
-          })
-        }
-      })
-    },
-    //绘制成图片
-    canvasToImg() {
-      if (!this.hasDrawn) {
-        uni.showToast({
-          title: '请先完成签名',
-          icon: 'none',
-        })
-        return
-      }
-
-      this.drawState = 'stop'
-
-      // 添加延时确保canvas绘制完成
-      setTimeout(() => {
-        try {
-          uni.canvasToTempFilePath(
-            {
-              canvasId: 'signatureCanvas',
-              x: 0,
-              y: 0,
-              width: this.width,
-              height: this.height,
-              destWidth: this.width * 2,
-              destHeight: this.height * 2,
-              fileType: 'png',
-              quality: 1,
-              success: (res) => {
-                console.log('确认签名', res.tempFilePath)
-                this.$emit('signatureComplete', res.tempFilePath)
-              },
-              fail: (err) => {
-                console.log('canvas转换失败', err)
-                uni.showToast({
-                  title: '生成签名失败',
-                  icon: 'none',
-                })
-              },
-            },
-            this,
-          )
-        } catch (err) {
-          console.error('生成签名图片失败:', err)
-        }
-      }, 100)
-    },
-  },
+        ctxScope,
+      )
+    } catch (err) {
+      console.error('生成签名图片失败:', err)
+    }
+  }, 100)
 }
 </script>
 

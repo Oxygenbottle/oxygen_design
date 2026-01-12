@@ -3,19 +3,8 @@
     <lottieCanvas></lottieCanvas>
   </view>
 </template>
-<script>
+<script setup>
 import lottieCanvas from '../../components/lottieCanvas/lottieCanvas.vue'
-export default {
-  components: { lottieCanvas },
-  data() {
-    return {
-      title: 'Hello',
-      inited: false,
-    }
-  },
-  onLoad() {},
-  methods: {},
-}
 </script>
 
 <style lang="scss" scoped>

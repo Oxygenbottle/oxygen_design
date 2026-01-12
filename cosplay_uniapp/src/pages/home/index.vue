@@ -32,64 +32,59 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { onMounted, ref } from 'vue'
 import navbar from './components/navbar/index.vue'
 import pageContainer from './components/pageContainer/index.vue'
 import { getHomeInfo } from '@/api/public.js'
 
-export default {
-  components: { navbar, pageContainer },
-  data() {
-    return {
-      dataList: [],
-      currentIndex: 0,
-      topPadding: 0,
-      navBarHeight: 0,
-      imgStyle: '',
-      loading: false,
-    }
-  },
-  created() {
-    try {
-      const navBarInfo = uni.getStorageSync('navBarInfo')
-      if (navBarInfo) {
-        this.topPadding = navBarInfo.statusBarHeight + navBarInfo.navBarHeight
-        this.navBarHeight = navBarInfo.navBarHeight
-        this.imgStyle = `margin-top: -${this.topPadding}rpx`
-      } else {
-        console.warn('缓存中未找到导航栏信息')
-      }
-      this.loadHomeData()
-    } catch (e) {
-      console.error('获取缓存数据失败', e)
-    }
-  },
-  methods: {
-    swiperChangeEnd(e) {
-      // console.log('swiperChangeEnd ====== >', e);
-      this.currentIndex = e.detail.current
-    },
-    changeTab(index) {
-      this.currentIndex = index
-    },
-    async loadHomeData() {
-      this.loading = true
-      try {
-        const response = await getHomeInfo()
-        if (response.success) {
-          this.dataList = response.data
-          console.log('成功加载首页数据:', this.dataList)
-        } else {
-          console.error('加载模拟数据失败:', response.message)
-        }
-      } catch (error) {
-        console.error('请求模拟数据时发生错误:', error)
-      } finally {
-        this.loading = false
-      }
-    },
-  },
+const dataList = ref([])
+const currentIndex = ref(0)
+const topPadding = ref(0)
+const navBarHeight = ref(0)
+const imgStyle = ref('')
+const loading = ref(false)
+
+const swiperChangeEnd = (e) => {
+  currentIndex.value = e.detail.current
 }
+
+const changeTab = (index) => {
+  currentIndex.value = index
+}
+
+const loadHomeData = async () => {
+  loading.value = true
+  try {
+    const response = await getHomeInfo()
+    if (response.success) {
+      dataList.value = response.data
+      console.log('成功加载首页数据:', dataList.value)
+    } else {
+      console.error('加载模拟数据失败:', response.message)
+    }
+  } catch (error) {
+    console.error('请求模拟数据时发生错误:', error)
+  } finally {
+    loading.value = false
+  }
+}
+
+onMounted(() => {
+  try {
+    const navBarInfo = uni.getStorageSync('navBarInfo')
+    if (navBarInfo) {
+      topPadding.value = navBarInfo.statusBarHeight + navBarInfo.navBarHeight
+      navBarHeight.value = navBarInfo.navBarHeight
+      imgStyle.value = `margin-top: -${topPadding.value}rpx`
+    } else {
+      console.warn('缓存中未找到导航栏信息')
+    }
+    loadHomeData()
+  } catch (e) {
+    console.error('获取缓存数据失败', e)
+  }
+})
 </script>
 
 <style lang="scss" scoped>

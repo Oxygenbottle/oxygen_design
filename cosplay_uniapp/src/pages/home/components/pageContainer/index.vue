@@ -5,22 +5,20 @@
     <Content :outerSwiperIndex="outerSwiperIndex" :classList="data.subClass"></Content>
   </div>
 </template>
-<script>
+<script setup>
 import Menu from '../menu/index.vue'
 import Notice from '../noticeBoard/index.vue'
 import Content from '../content/index.vue'
-export default {
-  components: { Menu, Notice, Content },
-  props: {
-    outerSwiperIndex: {
-      type: Number,
-      default: 0,
-    },
-    data: {
-      type: Object,
-      default: {},
-    },
+
+defineProps({
+  outerSwiperIndex: {
+    type: Number,
+    default: 0,
   },
-}
+  data: {
+    type: Object,
+    default: () => ({}),
+  },
+})
 </script>
 <style scoped lang="scss"></style>

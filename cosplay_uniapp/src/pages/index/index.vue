@@ -1,16 +1,16 @@
 <template>
   <view class="page">
     <view class="panels">
-      <view class="panel" :class="{ active: active === 0 }">
+      <view v-if="active === 0" class="panel active">
         <Home />
       </view>
-      <view class="panel" :class="{ active: active === 1 }">
+      <view v-else-if="active === 1" class="panel active">
         <Dynamic />
       </view>
-      <view class="panel" :class="{ active: active === 2 }">
+      <view v-else-if="active === 2" class="panel active">
         <Message />
       </view>
-      <view class="panel" :class="{ active: active === 3 }">
+      <view v-else class="panel active">
         <My />
       </view>
     </view>
@@ -26,7 +26,7 @@
     </view>
   </view>
 </template>
-<script>
+<script setup>
 import tabbar from '@/components/tabbar/index.vue'
 import addList from '@/components/addList/addList.vue'
 import Home from '@/pages/home/index.vue'
@@ -34,87 +34,86 @@ import Dynamic from '@/pages/dynamic/index.vue'
 import Message from '@/pages/message/index.vue'
 import My from '@/pages/my/index.vue'
 import { getTabbarInfo } from '@/api/public'
+import { ref } from 'vue'
+import { onLoad, onUnload } from '@dcloudio/uni-app'
 
-export default {
-  components: { tabbar, addList, Home, Dynamic, Message, My },
-  data() {
-    return {
-      active: 0,
-      tabItems: [
-        { key: 'home', text: '首页' },
-        { key: 'dynamic', text: '动态' },
-        { key: 'message', text: '消息' },
-        { key: 'my', text: '我的' },
-      ],
-      pageLoading: false,
-      loadingText: '加载中…',
-      _loadingTimer: null,
-    }
-  },
-  created() {
-    this.loadTabbarItems()
-  },
-  onUnload() {
-    if (this._loadingTimer) clearTimeout(this._loadingTimer)
-  },
-  methods: {
-    normalizeTabItems(rawItems) {
-      const fallback = [
-        { key: 'home', text: '首页' },
-        { key: 'dynamic', text: '动态' },
-        { key: 'message', text: '消息' },
-        { key: 'my', text: '我的' },
-      ]
+const active = ref(0)
+const tabItems = ref([
+  { key: 'home', text: '首页' },
+  { key: 'dynamic', text: '动态' },
+  { key: 'message', text: '消息' },
+  { key: 'my', text: '我的' },
+])
+const pageLoading = ref(false)
+const loadingText = ref('加载中…')
 
-      if (!Array.isArray(rawItems) || rawItems.length === 0) return fallback
+let loadingTimer = null
 
-      const getText = (item) => item && (item.text || item.label || item.name)
-      const mapByText = new Map()
-      rawItems.forEach((item) => {
-        const t = getText(item)
-        if (t) mapByText.set(String(t), item)
-      })
+const normalizeTabItems = (rawItems) => {
+  const fallback = [
+    { key: 'home', text: '首页' },
+    { key: 'dynamic', text: '动态' },
+    { key: 'message', text: '消息' },
+    { key: 'my', text: '我的' },
+  ]
 
-      const pickByFallback = (fb) => {
-        const raw =
-          mapByText.get(fb.text) || mapByText.get(fb.key) || mapByText.get(String(fb.text))
-        if (!raw) return fb
-        return { ...fb, text: getText(raw) || fb.text }
-      }
+  if (!Array.isArray(rawItems) || rawItems.length === 0) return fallback
 
-      const normalized = fallback.map(pickByFallback)
-      return normalized
-    },
-    async loadTabbarItems() {
-      try {
-        const res = await getTabbarInfo()
-        const rawItems = res && res.data ? res.data : []
-        this.tabItems = this.normalizeTabItems(rawItems)
-      } catch (e) {
-        this.tabItems = this.normalizeTabItems([])
-      }
-    },
-    showSwitchLoading(nextIndex) {
-      const item = this.tabItems[nextIndex]
-      const text = item && (item.text || item.label || item.name)
-      this.loadingText = text ? `正在切换到「${text}」…` : '加载中…'
-      this.pageLoading = true
-      if (this._loadingTimer) clearTimeout(this._loadingTimer)
-      this._loadingTimer = setTimeout(() => {
-        this.pageLoading = false
-        this._loadingTimer = null
-      }, 260)
-    },
-    onChangeTab(nextIndex) {
-      const next = Number(nextIndex)
-      if (!Number.isFinite(next)) return
-      if (next < 0 || next > 3) return
-      if (next === this.active) return
-      this.showSwitchLoading(next)
-      this.active = next
-    },
-  },
+  const getText = (item) => item && (item.text || item.label || item.name)
+  const mapByText = new Map()
+  rawItems.forEach((item) => {
+    const t = getText(item)
+    if (t) mapByText.set(String(t), item)
+  })
+
+  const pickByFallback = (fb) => {
+    const raw = mapByText.get(fb.text) || mapByText.get(fb.key) || mapByText.get(String(fb.text))
+    if (!raw) return fb
+    return { ...fb, text: getText(raw) || fb.text }
+  }
+
+  return fallback.map(pickByFallback)
 }
+
+const loadTabbarItems = async () => {
+  try {
+    const res = await getTabbarInfo()
+    const rawItems = res && res.data ? res.data : []
+    tabItems.value = normalizeTabItems(rawItems)
+  } catch (e) {
+    tabItems.value = normalizeTabItems([])
+  }
+}
+
+const showSwitchLoading = (nextIndex) => {
+  const item = tabItems.value[nextIndex]
+  const text = item && (item.text || item.label || item.name)
+  loadingText.value = text ? `正在切换到「${text}」…` : '加载中…'
+  pageLoading.value = true
+  if (loadingTimer) clearTimeout(loadingTimer)
+  loadingTimer = setTimeout(() => {
+    pageLoading.value = false
+    loadingTimer = null
+  }, 260)
+}
+
+const onChangeTab = (nextIndex) => {
+  const next = Number(nextIndex)
+  if (!Number.isFinite(next)) return
+  if (next < 0 || next > 3) return
+  if (next === active.value) return
+  showSwitchLoading(next)
+  active.value = next
+}
+
+onLoad(() => {
+  loadTabbarItems()
+})
+
+onUnload(() => {
+  if (loadingTimer) clearTimeout(loadingTimer)
+  loadingTimer = null
+})
 </script>
 
 <style lang="scss" scoped>

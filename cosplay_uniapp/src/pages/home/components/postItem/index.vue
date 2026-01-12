@@ -36,16 +36,13 @@
   </view>
 </template>
 
-<script>
-export default {
-  name: 'postItem',
-  props: {
-    post: {
-      type: Object,
-      required: false,
-    },
+<script setup>
+defineProps({
+  post: {
+    type: Object,
+    required: false,
   },
-}
+})
 </script>
 
 <style lang="scss" scoped>

@@ -10,15 +10,13 @@
     </scroll-view>
   </view>
 </template>
-<script>
-export default {
-  props: {
-    data: {
-      type: Array,
-      default: [],
-    },
+<script setup>
+defineProps({
+  data: {
+    type: Array,
+    default: () => [],
   },
-}
+})
 </script>
 
 <style scoped lang="scss">

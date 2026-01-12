@@ -9,11 +9,12 @@
     <div
       class="shadow_box"
       :class="[animationShow ? 'fadeIn' : 'fadeOut', shadowShow ? 'shadow_box_on' : '']"
-      @click="close"
+      @tap="close"
     ></div>
   </div>
 </template>
-<script>
+<script setup>
+import { ref } from 'vue'
 import iconCh from '@/assets/icons/materials/2star-ch.png'
 import iconFr from '@/assets/icons/materials/2star-fr.png'
 import iconHm from '@/assets/icons/materials/2star-hm.png'
@@ -22,63 +23,37 @@ import iconXl from '@/assets/icons/materials/2star-xl.png'
 import iconXw from '@/assets/icons/materials/2star-xw.png'
 import iconZs from '@/assets/icons/materials/2star-zs.png'
 
-export default {
-  data() {
-    return {
-      pop_show: false,
-      shadowShow: false,
-      animationShow: false,
+const pop_show = ref(false)
+const shadowShow = ref(false)
+const animationShow = ref(false)
 
-      materialsList: [
-        {
-          label: '存护',
-          icon: iconCh,
-        },
-        {
-          label: '丰饶',
-          icon: iconFr,
-        },
-        {
-          label: '毁灭',
-          icon: iconHm,
-        },
-        {
-          label: '同协',
-          icon: iconTx,
-        },
-        {
-          label: '巡猎',
-          icon: iconXl,
-        },
-        {
-          label: '虚无',
-          icon: iconXw,
-        },
-        {
-          label: '智识',
-          icon: iconZs,
-        },
-      ],
-    }
-  },
-  onLoad() {},
-  methods: {
-    open() {
-      this.pop_show = true
-      this.animationShow = true
-      setTimeout(() => {
-        this.shadowShow = true
-      }, 300)
-    },
-    close() {
-      this.shadowShow = false
-      this.animationShow = false
-      setTimeout(() => {
-        this.pop_show = false
-      }, 290)
-    },
-  },
+const materialsList = [
+  { label: '存护', icon: iconCh },
+  { label: '丰饶', icon: iconFr },
+  { label: '毁灭', icon: iconHm },
+  { label: '同协', icon: iconTx },
+  { label: '巡猎', icon: iconXl },
+  { label: '虚无', icon: iconXw },
+  { label: '智识', icon: iconZs },
+]
+
+const open = () => {
+  pop_show.value = true
+  animationShow.value = true
+  setTimeout(() => {
+    shadowShow.value = true
+  }, 300)
 }
+
+const close = () => {
+  shadowShow.value = false
+  animationShow.value = false
+  setTimeout(() => {
+    pop_show.value = false
+  }, 290)
+}
+
+defineExpose({ open, close })
 </script>
 
 <style lang="scss" scoped>

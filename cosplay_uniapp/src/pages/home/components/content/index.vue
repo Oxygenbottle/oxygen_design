@@ -12,7 +12,7 @@
           :key="index"
           class="tab-item"
           :class="{ active: activeIndex === index }"
-          @click="handleClickTab(index)"
+          @tap="handleClickTab(index)"
         >
           {{ tab.label }}
         </div>
@@ -37,138 +37,128 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { computed, getCurrentInstance, onMounted, ref, watch } from 'vue'
 import postItem from '../postItem/index.vue'
 
-export default {
-  components: {
-    postItem,
+const props = defineProps({
+  outerSwiperIndex: {
+    type: Number,
+    default: 0,
   },
-  props: {
-    outerSwiperIndex: {
-      type: Number,
-      default: 0,
-    },
-    classList: {
-      type: Array,
-      default: [],
-    },
+  classList: {
+    type: Array,
+    default: () => [],
   },
-  data() {
-    return {
-      tabs: [
-        { name: 'COS' },
-        { name: '古风' },
-        { name: '谷子' },
-        { name: '棚子' },
-        { name: '出图' },
-        { name: '咖啡馆' },
-        { name: '分享' },
-        { name: '讨论' },
-      ],
-      activeIndex: 0,
-      currentTabWidth: 0,
-      currentTabLeft: 0,
-      tabPositions: [],
-      isScrolling: false,
-      systemInfo: {},
-      scrollLeft: 0,
-      postList: [],
-      _outerSwiperIndex: 0,
+})
+
+const activeIndex = ref(0)
+const currentTabWidth = ref(0)
+const currentTabLeft = ref(0)
+const tabPositions = ref([])
+const isScrolling = ref(false)
+const systemInfo = ref({})
+const scrollLeft = ref(0)
+const postList = ref([])
+const outerSwiperIndexInner = ref(0)
+
+const instance = getCurrentInstance()
+const queryContext = instance?.proxy || instance
+
+onMounted(async () => {
+  await getSystemInfo()
+  cacheTabPositions()
+})
+
+const indicatorStyle = computed(() => {
+  const pageWidth = (systemInfo.value.windowWidth || 0) * outerSwiperIndexInner.value
+  const left = currentTabLeft.value + currentTabWidth.value / 2 - 24 - pageWidth
+  return `left: ${left}px;`
+})
+
+const viewportCenter = computed(() => {
+  return (systemInfo.value.windowWidth || 0) / 2 || 300
+})
+
+watch(
+  () => props.outerSwiperIndex,
+  (newVal) => {
+    console.log('获取外层swiper的索引 ======= >', newVal)
+    outerSwiperIndexInner.value = newVal
+  },
+  { immediate: true },
+)
+
+const getSystemInfo = () => {
+  try {
+    const windowWidth = uni.getStorageSync('windowWidth')
+    systemInfo.value = {
+      windowWidth,
     }
-  },
-  async mounted() {
-    await this.getSystemInfo()
-    this.cacheTabPositions()
-  },
-  computed: {
-    indicatorStyle() {
-      const _pageWidth = this.systemInfo.windowWidth * this._outerSwiperIndex
-      const left = this.currentTabLeft + this.currentTabWidth / 2 - 24 - _pageWidth
-      return `left: ${left}px;`
-    },
-    viewportCenter() {
-      return this.systemInfo.windowWidth / 2 || 300
-    },
-  },
-  watch: {
-    outerSwiperIndex: {
-      handler(newVal) {
-        console.log('获取外层swiper的索引 ======= >', newVal)
-        this._outerSwiperIndex = newVal
-      },
-      immediate: true,
-    },
-  },
-  methods: {
-    getSystemInfo() {
-      try {
-        const windowWidth = uni.getStorageSync('windowWidth')
-        this.systemInfo = {
-          windowWidth,
-        }
-      } catch (e) {
-        console.error('获取系统信息失败', e)
-        this.systemInfo = { windowWidth: 375 }
-      }
-    },
+  } catch (e) {
+    console.error('获取系统信息失败', e)
+    systemInfo.value = { windowWidth: 375 }
+  }
+}
 
-    cacheTabPositions() {
-      const query = uni.createSelectorQuery().in(this)
-      query.selectAll('.tab-item').boundingClientRect()
-      query.exec((res) => {
-        if (res && res[0]) {
-          this.tabPositions = res[0]
-          this.updateTabIndicator(0)
-        } else {
-          setTimeout(() => {
-            this.cacheTabPositions()
-          }, 100)
-        }
-      })
-    },
-
-    updateTabIndicator(index) {
-      if (this.tabPositions[index]) {
-        console.log('index ======= >', index)
-        const rect = this.tabPositions[index]
-        this.currentTabWidth = rect.width
-        this.currentTabLeft = rect.left
-      }
-    },
-
-    handleClickTab(index) {
-      if (this.isScrolling) return
-
-      this.activeIndex = index
-      this.updateTabIndicator(index)
-      this.scrollToTab(index)
-    },
-
-    scrollToTab(index) {
-      if (!this.tabPositions[index]) return
-
-      const rect = this.tabPositions[index]
-      const tabCenter = rect.left + rect.width / 2
-      const newScrollLeft =
-        tabCenter - this.viewportCenter - this.systemInfo.windowWidth * this._outerSwiperIndex
-
-      this.isScrolling = true
-      this.scrollLeft = newScrollLeft
-
+const cacheTabPositions = () => {
+  const query = queryContext
+    ? uni.createSelectorQuery().in(queryContext)
+    : uni.createSelectorQuery()
+  query.selectAll('.tab-item').boundingClientRect()
+  query.exec((res) => {
+    if (res && res[0]) {
+      tabPositions.value = res[0]
+      updateTabIndicator(0)
+    } else {
       setTimeout(() => {
-        this.isScrolling = false
-      }, 300)
-    },
+        cacheTabPositions()
+      }, 100)
+    }
+  })
+}
 
-    swiperChangeEnd(e) {
-      this.activeIndex = e.detail.current
-      setTimeout(() => {
-        this.scrollToTab(e.detail.current)
-        this.updateTabIndicator(e.detail.current)
-      }, 0)
-    },
-  },
+const updateTabIndicator = (index) => {
+  if (tabPositions.value[index]) {
+    console.log('index ======= >', index)
+    const rect = tabPositions.value[index]
+    currentTabWidth.value = rect.width
+    currentTabLeft.value = rect.left
+  }
+}
+
+const handleClickTab = (index) => {
+  if (isScrolling.value) return
+
+  activeIndex.value = index
+  updateTabIndicator(index)
+  scrollToTab(index)
+}
+
+const scrollToTab = (index) => {
+  if (!tabPositions.value[index]) return
+
+  const rect = tabPositions.value[index]
+  const tabCenter = rect.left + rect.width / 2
+  const newScrollLeft =
+    tabCenter -
+    viewportCenter.value -
+    (systemInfo.value.windowWidth || 0) * outerSwiperIndexInner.value
+
+  isScrolling.value = true
+  scrollLeft.value = newScrollLeft
+
+  setTimeout(() => {
+    isScrolling.value = false
+  }, 300)
+}
+
+const swiperChangeEnd = (e) => {
+  activeIndex.value = e.detail.current
+  setTimeout(() => {
+    scrollToTab(e.detail.current)
+    updateTabIndicator(e.detail.current)
+  }, 0)
 }
 </script>
 

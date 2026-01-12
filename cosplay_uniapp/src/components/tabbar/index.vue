@@ -14,30 +14,27 @@
   </view>
 </template>
 
-<script>
-export default {
-  name: 'SafeAreaTabbar',
-  props: {
-    active: {
-      type: Number,
-      default: 0,
-    },
-    items: {
-      type: Array,
-      default: () => [
-        { key: 'home', text: '首页' },
-        { key: 'dynamic', text: '动态' },
-        { key: 'message', text: '消息' },
-        { key: 'my', text: '我的' },
-      ],
-    },
+<script setup>
+const props = defineProps({
+  active: {
+    type: Number,
+    default: 0,
   },
-  emits: ['change'],
-  methods: {
-    onTap(index) {
-      this.$emit('change', index)
-    },
+  items: {
+    type: Array,
+    default: () => [
+      { key: 'home', text: '首页' },
+      { key: 'dynamic', text: '动态' },
+      { key: 'message', text: '消息' },
+      { key: 'my', text: '我的' },
+    ],
   },
+})
+
+const emit = defineEmits(['change'])
+
+const onTap = (index) => {
+  emit('change', index)
 }
 </script>
 

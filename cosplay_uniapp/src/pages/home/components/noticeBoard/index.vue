@@ -15,23 +15,20 @@
         </div>
       </swiper-item>
     </swiper>
-    <text class="news-more" @click="handleMore">全部></text>
+    <text class="news-more" @tap="handleMore">全部></text>
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    data: {
-      type: Array,
-      default: [],
-    },
+<script setup>
+defineProps({
+  data: {
+    type: Array,
+    default: () => [],
   },
-  methods: {
-    handleMore: () => {
-      console.log('跳转到全部资讯页面')
-    },
-  },
+})
+
+const handleMore = () => {
+  console.log('跳转到全部资讯页面')
 }
 </script>
 
